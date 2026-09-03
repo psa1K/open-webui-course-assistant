@@ -1,0 +1,1 @@
+# open-webui-course-assistant
