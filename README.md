@@ -12,6 +12,7 @@
 ## 当前进度
 
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
+- [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [ ] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）
 - [ ] RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
@@ -45,7 +46,19 @@ uv pip install --python .venv/bin/python open-webui
 
 ### 连接大语言模型
 
-在 Open WebUI 的 **设置 → 外部连接 → OpenAI API** 中添加模型服务（如本地 Ollama 或 OpenAI 兼容 API），保存后即可在对话中选择模型。
+在 Open WebUI 的 **设置 → 外部连接 → OpenAI API** 中添加模型服务（如本地 Ollama 或 OpenAI 兼容 API），保存后即可在对话中选择模型。也可通过管理员 API 配置：
+
+```bash
+# 需先用管理员账号登录获取 token，然后：
+curl -X POST http://localhost:8080/openai/config/update \
+  -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+  -d '{"ENABLE_OPENAI_API":true,
+       "OPENAI_API_BASE_URLS":["https://api.deepseek.com"],
+       "OPENAI_API_KEYS":["<DEEPSEEK_API_KEY>"],
+       "OPENAI_API_CONFIGS":{}}'
+```
+
+本仓库已接入 DeepSeek API（OpenAI 兼容，base_url `https://api.deepseek.com`），可用模型：`deepseek-v4-flash`、`deepseek-v4-pro`、`deepseek-v4-flash-vision-exp`。
 
 ## 使用说明
 
