@@ -22,25 +22,40 @@
 
 ## 安装与部署
 
-### 前置条件
+### 克隆并复现（推荐）
 
-- Python 3.11（建议使用 [uv](https://docs.astral.sh/uv/) 管理虚拟环境）
-- 至少一种大语言模型的访问方式（本地 Ollama 或 OpenAI 兼容 API）
+本项目设计为可复现：全新 clone 后按以下步骤即可在任意机器上跑通（依赖版本由 `requirements.lock` 锁定）：
 
-### 安装 Open WebUI
+```bash
+# 1. 克隆仓库
+git clone git@github.com:psa1K/open-webui-course-assistant.git
+cd open-webui-course-assistant
+
+# 2. 配置自己的密钥（复制模板并填入你自己的 DeepSeek API key）
+cp .env.example .env
+#   编辑 .env，把 OPENAI_API_KEY 改为你自己的 key（Open WebUI 会自动加载 .env）
+
+# 3. 一键安装（创建 Python 3.11 虚拟环境 + 按锁文件安装依赖）
+./scripts/setup.sh
+
+# 4. 启动
+.venv/bin/open-webui serve
+```
+
+启动后访问 http://localhost:8080，注册管理员账号即可使用。
+
+### 手动安装（等价步骤）
 
 ```bash
 # 创建虚拟环境
 uv venv --python 3.11 .venv
 
-# 安装 Open WebUI
-uv pip install --python .venv/bin/python open-webui
+# 按锁文件安装依赖（保证版本一致）
+uv pip install --python .venv/bin/python -r requirements.lock
 
 # 启动服务
 .venv/bin/open-webui serve
 ```
-
-启动后访问 http://localhost:8080。
 
 > 官方也支持 Docker 部署，参见 [Open WebUI README](https://github.com/open-webui/open-webui#how-to-install-)。
 
@@ -70,14 +85,24 @@ curl -X POST http://localhost:8080/openai/config/update \
 ## 目录结构
 
 ```
-├── AGENTS.md              # 团队协作约定（交互记录、PR-merge、README 维护）
+├── AGENTS.md              # 团队协作约定（交互记录、PR-merge、README 维护、可复现性）
 ├── README.md              # 本文件
+├── .env.example           # 环境变量模板（真实密钥放本机 .env，不入库）
+├── requirements.lock      # 依赖锁定（uv pip freeze，保证环境一致）
+├── scripts/
+│   └── setup.sh           # 一键安装脚本
 ├── interactions/          # 成员与 AI Agent 的交互记录
 │   ├── psa1K/
 │   └── eco-NIN/
 ├── knowledge/             # 课程知识库原始资料（按章节分类）
 └── .venv/                 # 虚拟环境（不入库）
 ```
+
+## 克隆后验证清单
+
+- [ ] `./scripts/setup.sh` 成功安装（.env 已存在）
+- [ ] `.venv/bin/open-webui serve` 启动，`curl http://localhost:8080/api/health` 返回正常
+- [ ] 管理员账号可登录，模型列表可见 DeepSeek 模型
 
 ## 测试与优化记录
 

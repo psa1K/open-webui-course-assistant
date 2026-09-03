@@ -7,5 +7,8 @@ __pycache__/
 .webui_secret_key
 *.db
 
+# Local secrets / env
+.env
+
 # OS
 .DS_Store
