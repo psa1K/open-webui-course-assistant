@@ -29,6 +29,7 @@
 - 禁止直接推送 `main`
 - 所有改动在功能分支上开发：`feat/<name>` / `fix/<name>` / `docs/<name>`
 - 通过 Pull Request 合并到 `main`，合并前确认 diff 干净、无敏感信息
+- **PR 须经用户审核通过后方可合并**：Agent 不得自行合并 PR，需等待用户（成员）明确批准后再执行 merge
 - 提交信息遵循 Conventional Commits：`<type>(<scope>): <subject>`（类型 `feat` `fix` `docs` `refactor` `test` `chore` 等）
 - 提交与 PR 使用 agent 身份时用 `opencode[bot]` 标识
 
