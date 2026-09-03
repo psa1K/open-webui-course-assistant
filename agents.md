@@ -1,0 +1,37 @@
+# AGENTS.md — 团队协作约定
+
+本仓库为「软件工程编程实训」课程项目 *课程专属 AI 助手*（李正丹、朱静雯 出题）的协作仓库，基于 Open WebUI + Codex 开发。
+
+## 团队成员
+
+- **psa1K** (Jialiang Cai)
+- **eco-NIN** (Yuzhe Guo)
+
+## 基本要求
+
+### 1. 保留与 Agent 的交互记录
+
+本项目要求综合使用 Codex / Claude / opencode 等 AI 编程工具完成开发。**两名成员必须分别保留各自与 Agent 的交互记录**，作为课程成果之一提交（题目要求提交"与 Codex 的交互记录"）。
+
+- 记录存放位置：`interactions/<github-username>/` 目录
+- 文件命名：按日期命名，如 `interactions/psa1K/2026-09-03.md`
+- 记录内容包含：
+  - 任务描述与输入的 prompt
+  - Agent 返回的关键输出（可截取要点）
+  - 采纳/修改的决策与理由
+  - 遇到的问题与解决办法
+- 每完成一个功能块及时归档，随代码一同提交；记录文件由各自成员负责维护，互不覆盖
+
+### 2. 所有提交走 PR-Merge 流程
+
+- 禁止直接推送 `main`
+- 所有改动在功能分支上开发：`feat/<name>` / `fix/<name>` / `docs/<name>`
+- 通过 Pull Request 合并到 `main`，合并前确认 diff 干净、无敏感信息
+- 提交信息遵循 Conventional Commits：`<type>(<scope>): <subject>`（类型 `feat` `fix` `docs` `refactor` `test` `chore` 等）
+- 提交与 PR 使用 agent 身份时用 `opencode[bot]` 标识
+
+### 3. 代码与文档约定
+
+- 不引入未使用的依赖；不添加冗余注释
+- 课程资料（知识库原始文件）按章节/模块分类存放
+- 关键配置（模型配置、系统提示词、RAG 参数）需在仓库中留档，便于测试与优化对比
