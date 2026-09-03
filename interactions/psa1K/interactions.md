@@ -50,3 +50,28 @@
   - 405 Method Not Allowed：端点前缀错误，源码定位后改用 `/openai/config/update`。
   - API key 不入库：仅写入 Open WebUI 配置存储，不提交仓库。
 - **结果**：DeepSeek 已接入，管理员账号可用。
+
+---
+
+## 交互 3 — 可复现性修改
+
+- **时间**：2026-09-03 19:18
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **任务**：保证仓库可复现，使同伴 clone 后能独立跑通 Open WebUI 环境。
+- **Prompt（要点）**：锁定依赖版本；API key 环境化；AGENTS.md 新增可复现性规则；README 增加克隆复现说明。
+- **Agent 输出（要点）**：
+  1. 生成 `requirements.lock`：`uv pip freeze` 锁定 282 个依赖精确版本（open-webui 0.11.3、torch 2.14.0）。
+  2. 新增 `.env.example`（OpenAI 兼容模板，DeepSeek base_url + key 占位符），`.gitignore` 增加 `.env`。
+  3. 新增 `scripts/setup.sh`：创建 Python 3.11 venv + 按锁文件安装依赖。
+  4. AGENTS.md 新增第 5 节「可复现性要求」。
+  5. README 新增「克隆并复现」「手动安装」「克隆后验证清单」章节。
+  6. 验证：在临时 venv 中按 `requirements.lock` 安装，open-webui 0.11.3 可正常 import。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 用 `uv pip freeze` 锁定全部依赖 | 保证两台机器环境完全一致 |
+  | 密钥走 `.env`（gitignore） | Open WebUI 自动加载项目根 `.env`，且真实 key 不入库 |
+  | 加一键 `setup.sh` | 同伴克隆后一条命令完成环境搭建 |
+  | 每条密钥由各自独立申请 | 避免共享 key 的泄露风险 |
+- **遇到的问题与解决**：验证临时 venv 占用约 7.2G，验证后已删除释放空间。
+- **结果**：可复现验证通过，PR 待用户审核后合并。
