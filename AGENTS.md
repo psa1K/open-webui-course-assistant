@@ -32,7 +32,7 @@
 - **PR 须经用户审核通过后方可合并**：Agent 不得自行合并 PR，需等待用户（成员）明确批准后再执行 merge
 - **合并后删除分支**：PR merge 后立即删除本地与远程的 feature 分支，避免残留
 - 提交信息遵循 Conventional Commits：`<type>(<scope>): <subject>`（类型 `feat` `fix` `docs` `refactor` `test` `chore` 等）
-- 提交与 PR 使用 agent 身份时用 `opencode[bot]` 标识
+- 提交与 PR 使用 agent 身份时用该成员所用 agent 的标识注明：如 psa1K 使用 opencode，则以 `opencode[bot]` 署名；另一同伴按其实际使用的 agent（如 Codex / Claude 等）署名，方便区分人类与 Agent 提交
 
 ### 3. README.md 的创建与维护
 
