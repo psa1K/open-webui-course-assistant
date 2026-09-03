@@ -1,0 +1,11 @@
+# Python / virtualenv
+.venv/
+__pycache__/
+*.py[cod]
+
+# Open WebUI runtime
+.webui_secret_key
+*.db
+
+# OS
+.DS_Store

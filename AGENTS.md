@@ -30,7 +30,13 @@
 - 提交信息遵循 Conventional Commits：`<type>(<scope>): <subject>`（类型 `feat` `fix` `docs` `refactor` `test` `chore` 等）
 - 提交与 PR 使用 agent 身份时用 `opencode[bot]` 标识
 
-### 3. 代码与文档约定
+### 3. README.md 的创建与维护
+
+- 新建 `README.md`，并在每次更新后维护它
+- README 至少包含：项目简介、安装与部署方式、使用说明、目录结构、测试与优化记录入口
+- 每次功能更新、部署变更或文档调整后，同步更新 README 的对应章节，保持与仓库实际状态一致
+
+### 4. 代码与文档约定
 
 - 不引入未使用的依赖；不添加冗余注释
 - 课程资料（知识库原始文件）按章节/模块分类存放
