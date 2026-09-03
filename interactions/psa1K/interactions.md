@@ -1,13 +1,13 @@
 # psa1K 交互记录
 
-> 说明：每次交互按时间顺序追加；字段包括时间、模型/Agent、任务、prompt、Agent 输出、决策、问题与解决。
+> 说明：每次交互按时间顺序追加；字段包括时间、Agent/模型、任务、prompt、Agent 输出、决策、问题与解决。
 
 ---
 
 ## 交互 1 — Open WebUI 本地部署（issue #14）
 
 - **时间**：2026-09-03 17:10
-- **模型/Agent**：opencode / DeepSeek-V4-Flash-0731
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
 - **任务**：认领并完成 issue #14「系统部署：Open WebUI 本地部署并连接至少一种大语言模型」。按官方 README 安装并启动 Open WebUI，验证可访问。
 - **Prompt（要点）**：阅读 `2. 李正丹-朱静雯老师的题目.docx` 与 Open WebUI README，完成本地部署。
 - **Agent 输出（要点）**：
@@ -30,7 +30,7 @@
 ## 交互 2 — 创建管理员账号并配置 DeepSeek API
 
 - **时间**：2026-09-03 18:50
-- **模型/Agent**：opencode / DeepSeek-V4-Flash-0731
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
 - **任务**：创建 Open WebUI 管理员账号，接入 DeepSeek 大语言模型。
 - **Prompt（要点）**：阅读 https://api-docs.deepseek.com/zh-cn/，创建管理员账号并连接 DeepSeek API。
 - **Agent 输出（要点）**：
