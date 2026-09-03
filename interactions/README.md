@@ -4,7 +4,7 @@
 
 - 每位成员在 `interactions/<github-username>/` 下建立自己的目录
 - 每人目录下**仅维护一个** Markdown 文件：`interactions.md`
-- 记录内容：**每次交互**包含时间、模型/Agent、任务描述与 prompt、Agent 关键输出、采纳决策、问题与解决
+- 记录内容：**每次交互**包含时间、Agent/模型、任务描述与 prompt、Agent 关键输出、采纳决策、问题与解决
 - 每次交互按时间顺序追加，随代码一同提交
 
 目录结构：

@@ -17,7 +17,7 @@
 - 文件命名：每位成员在自己的目录下**仅维护一个** Markdown 文件，文件名固定为 `interactions.md`
 - 记录内容：**每次交互**包含
   - **时间**：交互发生的时间（如 `2026-09-03 17:10`）
-  - **模型/Agent**：使用的 Agent 与模型（如 `opencode / DeepSeek-V4-Flash-0731`）
+  - **Agent/模型**：使用的 Agent 与模型（如 `opencode / DeepSeek-V4-Flash-0731`）
   - 任务描述与输入的 prompt
   - Agent 返回的关键输出（可截取要点）
   - 采纳/修改的决策与理由
