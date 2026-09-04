@@ -36,9 +36,9 @@ This project is developed with AI coding tools such as Codex / Claude / opencode
 
 ### 3. README.md Creation & Maintenance
 
-- Maintain the **root-level** `README.md` of the repository (only this one; do not create per-directory READMEs)
-- The README should at least cover: project intro, install & deployment, usage, directory structure, and where test/optimization records live
-- After every feature update, deployment change, or doc adjustment, update the relevant README section so it stays in sync with the actual repo state
+- Maintain the **root-level** `README.md` as the repository overview (project intro, install & deployment, usage, directory structure, test/optimization records)
+- Subdirectories **may** keep their own local README when it adds value (e.g. `knowledge/README.md` as the material index, `interactions/README.md` for the log convention); create one per directory only when useful, not mechanically
+- After every feature update, deployment change, or doc adjustment, update the relevant README (root and/or local) so it stays in sync with the actual repo state
 
 ### 4. Code & Documentation Conventions
 
