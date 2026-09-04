@@ -1,0 +1,7 @@
+{
+  "id": "course-ai-assistant",
+  "name": "课程 AI 助教",
+  "model": "deepseek-v4-flash",
+  "knowledge_name": "course-knowledge-base",
+  "description": "面向 Codex 实战课程与数学建模课程的资料优先 AI 助教。"
+}

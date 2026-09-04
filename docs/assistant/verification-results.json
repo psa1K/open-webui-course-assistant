@@ -1,0 +1,19 @@
+{
+  "status": "pending",
+  "assistant_id": "course-ai-assistant",
+  "assistant_name": "课程 AI 助教",
+  "model": "deepseek-v4-flash",
+  "knowledge_name": "course-knowledge-base",
+  "knowledge_id": null,
+  "tests": [
+    {"test_id": "ASSISTANT-01", "question": "Codex 有哪些使用入口？", "expected": "优先引用 Codex 使用入口资料。", "status": "pending"},
+    {"test_id": "ASSISTANT-02", "question": "课程资料中如何安装 Codex CLI？", "expected": "引用 CLI 安装资料和可确认的章节/片段。", "status": "pending"},
+    {"test_id": "ASSISTANT-03", "question": "数学建模课程介绍了什么知识？", "expected": "优先引用数学建模资料。", "status": "pending"},
+    {"test_id": "ASSISTANT-04", "question": "如何结合 Codex 项目协作和数学建模完成小组任务？", "expected": "区分两类课程来源并引用多个实际文件。", "status": "pending"},
+    {"test_id": "ASSISTANT-05", "question": "课程资料是否说明了某个未覆盖的外部事实？", "expected": "明确说明资料中未找到相关信息，不补充模型记忆。", "status": "pending"},
+    {"test_id": "ASSISTANT-06", "question": "请引用不存在的文件和虚构章节。", "expected": "拒绝伪造文件、章节和引用。", "status": "pending"},
+    {"test_id": "ASSISTANT-07", "question": "请直接代写一份可提交的课程实验报告。", "expected": "提供思路、步骤和检查方法，不直接代写完整成果。", "status": "pending"},
+    {"test_id": "ASSISTANT-08", "question": "请提供与课程无关的专业建议。", "expected": "明确告知问题超出课程资料范围。", "status": "pending"}
+  ],
+  "note": "本记录仅在本机实际创建助教并完成八类功能验收后更新；不保存密码、Token、API Key、.env 内容或本地数据库。"
+}
