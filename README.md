@@ -14,7 +14,7 @@
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
-- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：统一知识库上传、实际检索和最终回答验收脚本已完成；只有 6 类回答测试全部通过后才能标记完成
+- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：统一 Knowledge 上传、检索与最终回答验收脚本已完成；截至 2026-09-04，最近一次真实验证仍有失败项，待本机 Open WebUI 可访问后重新运行 6 类测试
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
