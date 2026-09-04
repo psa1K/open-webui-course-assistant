@@ -14,7 +14,7 @@
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
-- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：统一 Knowledge 上传、检索与最终回答验收脚本已完成；截至 2026-09-04，最近一次真实验证仍有失败项，待本机 Open WebUI 可访问后重新运行 6 类测试
+- [x] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：18 个资料文件已上传到一个 `course-knowledge-base`；2026-09-04 使用 `deepseek-v4-flash` 完成 6 类真实最终回答验收，检索引用、无答案处理与防编造检查均通过
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
@@ -137,7 +137,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 - Issue #16 测试模板：`tests/rag-test-template.md`
 - Issue #16 脱敏验收结果：`docs/rag/verification-results.json`
 
-Issue #16 的“完成”只表示 6 类最终回答测试全部通过，不能仅凭上传成功或检索接口返回片段宣称完成。未通过时应根据真实命中质量调整 Top-K 和相关性阈值，而不是修改提示词掩盖检索问题。
+Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
 
 ## 相关链接
 

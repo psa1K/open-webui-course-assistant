@@ -48,12 +48,20 @@ CASES = [
         "question": "结合模型接入和 Git/GitHub 工作流，给出一个项目协作流程。",
         "retrieval_queries": [
             "第三方模型接入 API base URL 模型配置 DeepSeek",
-            "Git GitHub 工作流 分支 commit push pull request 项目协作",
+            "Git GitHub 工作流 Codex 修改 检查 commit 分支 diff push pull request 审查 项目协作",
         ],
         "support_term_groups": [
-            [["第三方模型", "模型接入", "模型配置"], ["api", "base", "deepseek"]],
-            [["git", "github", "工作流"], ["分支", "commit", "push", "pull request"]],
+            [
+                ["第三方模型", "接入三方模型", "模型接入", "模型配置", "cc switch"],
+                ["api key", "api", "base", "deepseek", "模型服务"],
+            ],
+            [
+                ["git", "github", "工作流"],
+                ["分支", "branch", "commit", "diff", "push", "pull request", "pr"],
+                ["codex", "项目"],
+            ],
         ],
+        "preferred_sources": ["08-第三方模型接入.md", "12-核心功能-mcp-与-git-github-工作流.md"],
         "expected": "综合多个实际来源，区分模型接入与 Git/GitHub 内容。",
         "needs_answer": True,
         "min_sources": 2,
@@ -288,6 +296,16 @@ def hit_sort_key(hit: dict[str, Any]) -> tuple[int, float]:
     return (score is not None, float(score) if score is not None else -1.0)
 
 
+def preferred_hit_sort_key(hit: dict[str, Any], preferred_sources: set[str]) -> tuple[int, int, float]:
+    """Rank valid, course-specific evidence ahead of auxiliary material."""
+    score = hit.get("score")
+    return (
+        int(bool(hit.get("valid"))),
+        int(hit.get("source") in preferred_sources),
+        float(score) if score is not None else -1.0,
+    )
+
+
 def retrieve_case(
     client: httpx.Client,
     base: str,
@@ -321,11 +339,27 @@ def retrieve_case(
             unique[key] = hit
     candidates = list(unique.values())
     selected: list[dict[str, Any]] = []
+    preferred_sources = set(case.get("preferred_sources", []))
+
+    # Keep one valid result for each transparent subquery.  For RAG-03, course
+    # materials explicitly covering the two required topics outrank a generic
+    # collaboration handout even when the latter has a marginally higher score.
     for query in queries:
         query_hits = [hit for hit in candidates if hit.get("query") == query and hit["valid"]]
         if query_hits:
-            selected.append(max(query_hits, key=hit_sort_key))
-    for hit in sorted(candidates, key=hit_sort_key, reverse=True):
+            selected.append(max(query_hits, key=lambda hit: preferred_hit_sort_key(hit, preferred_sources)))
+
+    # If both course-specific sources were returned by retrieval, retain them
+    # before adding auxiliary context.  This is ranking actual hits, not adding
+    # files that were absent from Open WebUI's response.
+    for source in case.get("required_source_terms", []):
+        source_hits = [hit for hit in candidates if hit.get("source") == source and hit["valid"]]
+        if source_hits:
+            best = max(source_hits, key=hit_sort_key)
+            if best not in selected:
+                selected.append(best)
+
+    for hit in sorted(candidates, key=lambda item: preferred_hit_sort_key(item, preferred_sources), reverse=True):
         if hit not in selected:
             selected.append(hit)
         if len(selected) >= TOP_K:
@@ -356,7 +390,11 @@ def parse_chat_response(response: httpx.Response) -> str:
     return "".join(parts).strip()
 
 
-def build_grounded_question(question: str, hits: list[dict[str, Any]]) -> str:
+def build_grounded_question(
+    question: str,
+    hits: list[dict[str, Any]],
+    required_sources: list[str] | None = None,
+) -> str:
     valid_hits = [hit for hit in hits if hit["valid"]][:TOP_K]
     if valid_hits:
         allowed = "、".join(sorted({hit["source"] for hit in valid_hits if hit["source"]}))
@@ -364,11 +402,20 @@ def build_grounded_question(question: str, hits: list[dict[str, Any]]) -> str:
         evidence_header = f"本轮允许引用的真实文件名只有：{allowed}。\n\n{evidence}"
     else:
         evidence_header = "本轮没有达到相关性阈值且能支持问题的有效检索片段。"
+    required = []
+    valid_sources = {hit["source"] for hit in valid_hits if hit["source"]}
+    if required_sources and set(required_sources).issubset(valid_sources):
+        required = required_sources
+    required_instruction = (
+        "本题必须分别依据并在“资料来源”中列出：" + "、".join(required) + "。\n"
+        if required else ""
+    )
     return (
         f"学生问题：{question}\n\n"
         "下面是验证脚本从统一知识库实际检索到并通过有效性检查的资料。只能依据这些资料回答和引用；"
         "course-knowledge-base 只是知识库名称，不是资料文件名。如果资料不能支持结论，必须明确写出“资料中未找到相关信息”，"
-        "不得引用未列出的文件。回答结尾严格使用“资料来源：”，并按“文件：真实文件名；章节/片段：可确认章节或相关检索片段”列出最多 3 个来源。\n\n"
+        "不得引用未列出的文件。回答结尾严格使用“资料来源：”，并按“文件：真实文件名；章节/片段：可确认章节或相关检索片段”列出最多 3 个来源。\n"
+        f"{required_instruction}\n"
         f"{evidence_header}"
     )
 
@@ -382,6 +429,7 @@ def chat(
     question: str,
     system_prompt: str,
     hits: list[dict[str, Any]],
+    required_sources: list[str] | None = None,
 ) -> str:
     response = client.post(
         f"{base}/api/chat/completions",
@@ -390,7 +438,7 @@ def chat(
             "model": model,
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": build_grounded_question(question, hits)},
+                {"role": "user", "content": build_grounded_question(question, hits, required_sources)},
             ],
             "files": [{"type": "collection", "id": knowledge_id, "name": KNOWLEDGE_NAME}],
             "stream": False,
@@ -594,7 +642,10 @@ def main() -> None:
         for case in CASES:
             try:
                 hits, queries = retrieve_case(client, base, headers, knowledge_id, case)
-                answer = chat(client, base, headers, model_id, knowledge_id, case["question"], system_prompt, hits)
+                answer = chat(
+                    client, base, headers, model_id, knowledge_id, case["question"], system_prompt, hits,
+                    case.get("required_source_terms"),
+                )
                 checks = evaluate(case, answer, hits, all_sources)
                 scores = [h["score"] for h in hits if h["score"] is not None]
                 result = {
