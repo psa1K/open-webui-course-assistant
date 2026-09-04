@@ -15,7 +15,7 @@
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
 - [x] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：18 个资料文件已上传到一个 `course-knowledge-base`；2026-09-04 使用 `deepseek-v4-flash` 完成 6 类真实最终回答验收，检索引用、无答案处理与防编造检查均通过
-- [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
+- [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）：配置已归档，待本机创建与 8 类功能验收
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
@@ -103,6 +103,26 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 脚本会在同一个 `course-knowledge-base` 上执行 6 类测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护、引用格式检查。结果写入 `docs/rag/verification-results.json`；输出文件只保留脱敏的命中片段摘要和验收字段，不保存密码、token、API Key 或本地数据库。
 
+## 课程 AI 助教（Issue #17）
+
+课程助教配置位于 `configs/course-assistant/`，默认名称为“课程 AI 助教”，使用 `deepseek-v4-flash`，绑定唯一统一知识库 `course-knowledge-base`，覆盖 Codex 实战课程和数学建模课程。配置不包含密码、Token 或 API Key。
+
+先检查配置（不会创建或更新 Open WebUI 模型）：
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+.venv/bin/python scripts/create_course_assistant.py --base http://127.0.0.1:8080 --model deepseek-v4-flash --dry-run
+```
+
+确认无误后创建或同步工作空间模型；若同 ID 模型已存在，脚本会更新它：
+
+```bash
+.venv/bin/python scripts/create_course_assistant.py --base http://127.0.0.1:8080 --model deepseek-v4-flash
+```
+
+可用 `--knowledge-id` 指定已确认的 Knowledge ID，`--name` 覆盖助教名称，`--model` 覆盖底层模型。脚本会检查模型和 Knowledge 是否存在，并使用 `trust_env=False` 避免本地代理影响请求。Issue #17 只有在实际创建成功并完成 8 类功能验收后才标记为完成；结果保存在 `docs/assistant/verification-results.json`。
+
 ## 目录结构
 
 ```
@@ -136,6 +156,8 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 - Issue #16 配置：`configs/course-knowledge-base/`
 - Issue #16 测试模板：`tests/rag-test-template.md`
 - Issue #16 脱敏验收结果：`docs/rag/verification-results.json`
+- Issue #17 助教配置：`configs/course-assistant/`
+- Issue #17 验收记录：`docs/assistant/verification-results.json`
 
 Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
 

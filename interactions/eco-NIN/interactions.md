@@ -108,3 +108,12 @@
 - **关键验收证据**：RAG-03 实际引用 `08-第三方模型接入.md`、`12-核心功能-mcp-与-git-github-工作流.md`，并附带 `00-协作工具-环境准备.pdf` 作为辅助来源；无答案与虚构引用场景均未产生伪造来源。
 - **采纳的决策**：Issue #16 的真实验收条件已满足，因此更新 README 为已完成；提交脱敏验证结果、代码、测试与本交互记录。
 - **安全说明**：验证记录仅保留 Knowledge 名称/ID、模型名、文件名和检索摘要；不记录密码、token、API Key 或 `.env` 内容。
+
+## 2026-09-04 课程 AI 助教 Issue #17
+
+- **Agent/Model**：Codex / 当前会话模型
+- **任务与提示**：在 Issue #16 已完成的统一 `course-knowledge-base` 基础上，实现 Issue #17：创建可复现的“课程 AI 助教”，默认使用 `deepseek-v4-flash`，覆盖 Codex 实战课程与数学建模课程，并通过分支和 PR 提交。
+- **关键输出**：新增 `configs/course-assistant/assistant.json` 与 `system-prompt.md`，新增 `scripts/create_course_assistant.py`，支持自动发现/校验 Knowledge、模型校验、创建或更新 Workspace Model、`--dry-run`、参数覆盖和本地代理隔离；新增脱敏验收记录模板 `docs/assistant/verification-results.json` 与离线测试 `tests/test_course_assistant.py`。
+- **决策**：继续使用一个统一 Knowledge，不新增工具；Issue #17 暂不标记完成，因为本轮尚未完成本机真实创建和 8 类功能验收，避免把配置存在误写成部署成功。
+- **检查结果**：Python 语法检查、现有测试和新增测试共 18 项通过；`git diff --check` 通过。尝试检查本地服务时发现当前终端代理变量使 `curl` 请求走向代理端口，脚本已统一使用 `trust_env=False`；后续需在 Open WebUI 可访问且管理员凭据已设置时执行 dry-run 和实际同步。
+- **敏感信息处理**：未记录密码、Token、API Key、`.env` 内容或本地数据库；验证结果文件仅保留待填写的脱敏结构。
