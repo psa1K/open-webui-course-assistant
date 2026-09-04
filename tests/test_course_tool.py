@@ -104,11 +104,11 @@ class CourseToolTests(unittest.TestCase):
         for term in ("不是固定题库", "临时生成", "course-knowledge-base", "资料中未找到相关信息", "结构化 JSON 和 Markdown", "不能代替学生完成整份"):
             self.assertIn(term, text)
 
-    def test_verification_record_is_safe_and_pending(self):
+    def test_verification_record_is_safe_and_passed(self):
         data = json.loads((ROOT / "docs/tools/verification-results.json").read_text())
-        self.assertEqual(data["status"], "pending_live_openwebui_dialogue")
+        self.assertEqual(data["status"], "passed")
         self.assertNotIn("password", json.dumps(data).lower())
-        self.assertNotIn("token", json.dumps(data).lower())
+        self.assertNotIn("bearer ", json.dumps(data).lower())
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
 - [x] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：18 个资料文件已上传到一个 `course-knowledge-base`；2026-09-04 使用 `deepseek-v4-flash` 完成 6 类真实最终回答验收，检索引用、无答案处理与防编造检查均通过
 - [x] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）：已创建并绑定 `course-knowledge-base`，系统提示词和 8 项课程助教能力检查完成
-- [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18)：章节练习题临时生成器，代码与离线测试已完成，待本机 Open WebUI 同步和实际对话验收）
+- [x] 章节练习题临时生成器（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18)）：已同步 `course_practice_generator`，并完成本机 Open WebUI 实际对话验收
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
@@ -143,7 +143,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 可用 `--tool-id` 和 `--name` 覆盖默认值。工具支持 `course`、`chapter`、`difficulty`、`count`、`question_types`、`student_level`、`include_answer`；输出必须同时包含结构化 JSON 和 Markdown。默认不输出完整答案，显式开启 `include_answer` 时也只提供受控的参考思路、评分要点或简要答案。
 
-Issue #18 只有在工具实际同步成功并完成 Open WebUI 对话验收后才能标记为完成。目前离线验证记录位于 `docs/tools/verification-results.json`，状态为待真实对话验收；交互过程位于 `interactions/eco-NIN/interactions.md`。
+Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI、Git/GitHub、数学建模、学生水平、答案开关、无资料拒答、虚构引用防护和结构化输出等实际对话验收。脱敏结果位于 `docs/tools/verification-results.json`，交互过程位于 `interactions/eco-NIN/interactions.md`。
 
 ## 目录结构
 

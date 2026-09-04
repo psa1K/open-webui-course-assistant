@@ -1,8 +1,12 @@
 {
   "tool_id": "course_practice_generator",
   "tool_name": "章节练习题生成器",
-  "verification_mode": "offline_configuration",
-  "status": "pending_live_openwebui_dialogue",
+  "verification_mode": "offline_and_user_reported_live_openwebui_dialogue",
+  "status": "passed",
+  "passed": true,
+  "model": "deepseek-v4-flash",
+  "knowledge_name": "course-knowledge-base",
+  "knowledge_id": "9e9c615b-02d5-4d17-a00d-ae80bd737bf4",
   "checks": {
     "temporary_generation": true,
     "fixed_question_bank": false,
@@ -10,8 +14,52 @@
     "structured_json_and_markdown": true,
     "citation_required": true,
     "academic_integrity": true,
-    "offline_tests": "pending"
+    "offline_tests": "39 passed",
+    "tool_sync": "passed",
+    "dialogue_acceptance": "passed"
   },
-  "live_cases": [],
-  "note": "未完成 Open WebUI 实际同步和对话验收前，不将 Issue #18 标记为完成。"
+  "live_cases": [
+    {
+      "case": "Codex CLI 章节",
+      "request": "2 道中等难度题",
+      "passed": true
+    },
+    {
+      "case": "Git/GitHub 工作流章节",
+      "request": "3 道进阶综合题",
+      "passed": true
+    },
+    {
+      "case": "数学建模 KMP 章节",
+      "request": "2 道简单题",
+      "passed": true
+    },
+    {
+      "case": "学生水平调整",
+      "passed": true
+    },
+    {
+      "case": "include_answer=false 不输出完整答案",
+      "passed": true
+    },
+    {
+      "case": "include_answer=true 受控参考答案",
+      "passed": true
+    },
+    {
+      "case": "不存在或未覆盖章节拒答",
+      "expected": "资料中未找到相关信息",
+      "passed": true
+    },
+    {
+      "case": "虚构文件和章节引用防护",
+      "passed": true
+    },
+    {
+      "case": "数量、题型、来源字段完整",
+      "passed": true
+    }
+  ],
+  "result": "全部离线检查和用户报告的本机 Open WebUI 实际对话验收通过。",
+  "note": "实时验收结果依据用户于 2026-09-04 的本机执行反馈记录；文件仅保留脱敏验收字段，不保存密码、Token、API Key、.env 内容或本地数据库。"
 }
