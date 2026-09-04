@@ -117,3 +117,11 @@
 - **决策**：继续使用一个统一 Knowledge，不新增工具；Issue #17 暂不标记完成，因为本轮尚未完成本机真实创建和 8 类功能验收，避免把配置存在误写成部署成功。
 - **检查结果**：Python 语法检查、现有测试和新增测试共 18 项通过；`git diff --check` 通过。尝试检查本地服务时发现当前终端代理变量使 `curl` 请求走向代理端口，脚本已统一使用 `trust_env=False`；后续需在 Open WebUI 可访问且管理员凭据已设置时执行 dry-run 和实际同步。
 - **敏感信息处理**：未记录密码、Token、API Key、`.env` 内容或本地数据库；验证结果文件仅保留待填写的脱敏结构。
+
+## 2026-09-04 课程 AI 助教实际创建结果
+
+- **Agent/Model**：Codex / 当前会话模型
+- **任务与提示**：用户在本机执行课程 AI 助教创建/同步脚本。
+- **实际结果**：Open WebUI 返回 `created`；助教 ID 为 `course-ai-assistant`，模型为 `deepseek-v4-flash`，绑定 Knowledge 名称为 `course-knowledge-base`，Knowledge ID 已由脚本发现并脱敏记录。
+- **判断**：Issue #17 的实际创建步骤已成功；仍需完成 8 类功能验收并将脱敏结果写入 `docs/assistant/verification-results.json`，在此之前 README 不标记 Issue #17 完成。
+- **敏感信息处理**：未记录密码、Token、API Key 或 `.env` 内容。
