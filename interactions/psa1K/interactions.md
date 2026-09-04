@@ -75,3 +75,30 @@
   | 每条密钥由各自独立申请 | 避免共享 key 的泄露风险 |
 - **遇到的问题与解决**：验证临时 venv 占用约 7.2G，验证后已删除释放空间。
 - **结果**：可复现验证通过，PR 待用户审核后合并。
+
+---
+
+## 交互 4 — 课程知识库搭建（issue #15）
+
+- **时间**：2026-09-04 11:20
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **任务**：认领并完成 issue #15「课程知识库：建立课程专属知识库（≥8 个资料/≥30页，按章节分类）」，并上传到 Open WebUI 验证 RAG。
+- **Prompt（要点）**：把 `notes/2026summer internship/` 的课程资料整理为知识库；course-1-14 拆成 Markdown；两门课程都建 collection。
+- **Agent 输出（要点）**：
+  1. 编写 `scripts/export_units.py`：解析 `course-1-14/index.html` 的 14 个 `course-unit`，转成 14 个 Markdown 文件（含标题、正文、代码块、清洗空白）。
+  2. 整理 `knowledge/`：`codex-course/`（14 个 MD + 协作工具 PDF 85页 + courses_mcp01.py）、`math-modeling/`（Lecture1.pdf 24页 + Lecture1.tex）、`knowledge/README.md` 索引。
+  3. 编写 `scripts/upload_knowledge.py`：登录→建 collection→上传文件→等处理完成→挂载到知识库。
+  4. 上传：codex-course 16 个文件、math-modeling 2 个文件。
+  5. RAG 验证：`POST /api/v1/retrieval/query/collection` 查询两库均返回相关文档。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 课件拆成 Markdown 入库 | 便于 RAG 检索与引用，HTML 解析效果差 |
+  | 79 张图片不入库 | 占 25M 体积，RAG 意义有限 |
+  | 两门课程各建一个 collection | 用户确认"两门都建" |
+  | collection 名用知识库 ID 查询 | Open WebUI collection 实际名称是知识库 ID |
+- **遇到的问题与解决**：
+  - 上传后立即 `file/add` 报 "content is empty"：文件异步处理未完成，加 `wait_for_processing` 轮询 status=completed。
+  - 重复上传导致 "Duplicate content"：清理残留文件 + `--reset` 重建知识库后重传。
+  - 用 collection 名 "codex-course" 查询为空：改用知识库 ID 作为 collection 名查询成功。
+- **结果**：两个知识库已建且 RAG 检索正常（codex-course 16 文件、math-modeling 2 文件）。

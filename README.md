@@ -13,7 +13,7 @@
 
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
-- [ ] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）
+- [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
 - [ ] RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
@@ -90,11 +90,16 @@ curl -X POST http://localhost:8080/openai/config/update \
 ├── .env.example           # 环境变量模板（真实密钥放本机 .env，不入库）
 ├── requirements.lock      # 依赖锁定（uv pip freeze，保证环境一致）
 ├── scripts/
-│   └── setup.sh           # 一键安装脚本
+│   ├── setup.sh           # 一键安装脚本
+│   ├── export_units.py    # 把课程 HTML 拆分为单元 Markdown
+│   └── upload_knowledge.py# 上传 knowledge/ 到 Open WebUI 知识库
 ├── interactions/          # 成员与 AI Agent 的交互记录
 │   ├── psa1K/
 │   └── eco-NIN/
-├── knowledge/             # 课程知识库原始资料（按章节分类）
+├── knowledge/             # 课程知识库原始资料
+│   ├── README.md          # 资料索引
+│   ├── codex-course/      # Codex 实战课程（14 单元 MD + PDF + 示例代码）
+│   └── math-modeling/     # 数学建模课程（Lecture1.pdf + tex）
 └── .venv/                 # 虚拟环境（不入库）
 ```
 
