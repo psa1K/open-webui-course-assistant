@@ -14,7 +14,7 @@
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
-- [ ] RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）
+- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：已完成统一知识库上传脚本、引用配置和 API 验证工具；需在本地管理员凭据和 Open WebUI 服务可用后执行真实验证
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
@@ -82,6 +82,22 @@ curl -X POST http://localhost:8080/openai/config/update \
 3. 在「工作空间」中创建课程专属模型/智能体（系统提示词 + 知识库 + 工具）
 4. 在知识库中上传课程资料，启用 RAG
 
+### 上传统一课程知识库
+
+确保本地 Open WebUI 已启动，并在 `.env` 或当前终端设置管理员凭据：
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+.venv/bin/python scripts/upload_knowledge.py --reset
+```
+
+脚本会将 `knowledge/` 下 Codex 实战课程和数学建模资料全部上传到同一个 `course-knowledge-base` 知识库。若服务不在默认地址，可使用 `--base http://localhost:8080`。上传完成后运行：
+
+```bash
+.venv/bin/python scripts/verify_rag.py
+```
+
 ## 目录结构
 
 ```
@@ -112,7 +128,11 @@ curl -X POST http://localhost:8080/openai/config/update \
 
 ## 测试与优化记录
 
-见各功能 issue 的验收标准；测试结果与优化前后对比将归档到 `docs/` 或对应 issue。
+- Issue #16 配置：`configs/course-knowledge-base/`
+- Issue #16 测试模板：`tests/rag-test-template.md`
+- Issue #16 API 检索结果：`docs/rag/verification-results.json`
+
+测试结果由本地 Open WebUI 实际运行生成；调参应依据检索结果优化 Top-K 和相关性阈值。
 
 ## 相关链接
 
