@@ -102,3 +102,23 @@
   - 重复上传导致 "Duplicate content"：清理残留文件 + `--reset` 重建知识库后重传。
   - 用 collection 名 "codex-course" 查询为空：改用知识库 ID 作为 collection 名查询成功。
 - **结果**：两个知识库已建且 RAG 检索正常（codex-course 16 文件、math-modeling 2 文件）。
+
+---
+
+## 交互 5 — 同步队友改动与课程工具安装（issue #18）
+
+- **时间**：2026-09-04 12:30
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **任务**：同步远程仓库（队友 PR #40-#43），审阅 #16/#17 交付；在本机 Open WebUI 安装 `create_course_tool.py` 对应的 Workspace Tool（issue #18）。
+- **Agent 输出（要点）**：
+  1. 同步：远程 main 领先 15 提交，`git pull` 完成同步；队友交付统一知识库 `course-knowledge-base`（18 文件）、RAG 验证（6 类通过）、课程助教（`course-ai-assistant`）。
+  2. 审阅：19 项单元测试（venv）全部通过；验证结果无密钥泄露；发现本机 Open WebUI 尚无统一知识库与助教（队友验证在其本机完成）。
+  3. 工具安装：`create_course_tool.py --dry-run` 通过后实际执行，Open WebUI 创建成功 `course_practice_generator`（章节练习题生成器）。
+  4. 验证：工具详情确认 `class Tools` 与 `generate_practice_questions` 完整；chat function calling 中模型正确发起 `tool_calls`；本地执行逻辑验证合法输入返回 `ready`、非法输入返回 `INVALID_INPUT`。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 用 `--dry-run` 预检再安装 | 避免覆盖现有配置 |
+  | function calling 验证而非 REST execute | Workspace Tool 由对话内模型调用，无独立 execute 端点 |
+- **遇到的问题与解决**：直接 REST 调用工具执行端点返回 405；读源码确认 Workspace Tool 仅在 chat 中由模型调用，改用 chat/completions + `tool_ids` 验证。
+- **结果**：工具已安装并可用；待办——本机尚需同步统一知识库与助教（`upload_knowledge.py --reset` + `create_course_assistant.py`）。
