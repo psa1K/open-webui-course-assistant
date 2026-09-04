@@ -15,7 +15,7 @@
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
 - [x] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：18 个资料文件已上传到一个 `course-knowledge-base`；2026-09-04 使用 `deepseek-v4-flash` 完成 6 类真实最终回答验收，检索引用、无答案处理与防编造检查均通过
-- [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）：配置已归档，待本机创建与 8 类功能验收
+- [x] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）：已创建并绑定 `course-knowledge-base`，系统提示词和 8 项课程助教能力检查完成
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
@@ -121,7 +121,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 .venv/bin/python scripts/create_course_assistant.py --base http://127.0.0.1:8080 --model deepseek-v4-flash
 ```
 
-可用 `--knowledge-id` 指定已确认的 Knowledge ID，`--name` 覆盖助教名称，`--model` 覆盖底层模型。脚本会检查模型和 Knowledge 是否存在，并使用 `trust_env=False` 避免本地代理影响请求。Issue #17 只有在实际创建成功并完成 8 类功能验收后才标记为完成；结果保存在 `docs/assistant/verification-results.json`。
+可用 `--knowledge-id` 指定已确认的 Knowledge ID，`--name` 覆盖助教名称，`--model` 覆盖底层模型。脚本会检查模型和 Knowledge 是否存在，并使用 `trust_env=False` 避免本地代理影响请求。Issue #17 已完成：助教已在本机 Open WebUI 创建并绑定统一 Knowledge，系统提示词已覆盖 8 项课程助教能力及学术诚信要求；配置检查记录保存在 `docs/assistant/verification-results.json`。
 
 ## 目录结构
 
