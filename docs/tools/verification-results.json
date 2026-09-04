@@ -1,0 +1,17 @@
+{
+  "tool_id": "course_practice_generator",
+  "tool_name": "章节练习题生成器",
+  "verification_mode": "offline_configuration",
+  "status": "pending_live_openwebui_dialogue",
+  "checks": {
+    "temporary_generation": true,
+    "fixed_question_bank": false,
+    "knowledge_source": "course-knowledge-base",
+    "structured_json_and_markdown": true,
+    "citation_required": true,
+    "academic_integrity": true,
+    "offline_tests": "pending"
+  },
+  "live_cases": [],
+  "note": "未完成 Open WebUI 实际同步和对话验收前，不将 Issue #18 标记为完成。"
+}
