@@ -16,7 +16,7 @@
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
 - [x] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：18 个资料文件已上传到一个 `course-knowledge-base`；2026-09-04 使用 `deepseek-v4-flash` 完成 6 类真实最终回答验收，检索引用、无答案处理与防编造检查均通过
 - [x] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）：已创建并绑定 `course-knowledge-base`，系统提示词和 8 项课程助教能力检查完成
-- [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
+- [x] 章节练习题临时生成器（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18)）：已同步 `course_practice_generator`，并完成本机 Open WebUI 实际对话验收
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
@@ -123,6 +123,28 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 可用 `--knowledge-id` 指定已确认的 Knowledge ID，`--name` 覆盖助教名称，`--model` 覆盖底层模型。脚本会检查模型和 Knowledge 是否存在，并使用 `trust_env=False` 避免本地代理影响请求。Issue #17 已完成：助教已在本机 Open WebUI 创建并绑定统一 Knowledge，系统提示词已覆盖 8 项课程助教能力及学术诚信要求；配置检查记录保存在 `docs/assistant/verification-results.json`。
 
+## 章节练习题临时生成器（Issue #18）
+
+Issue #18 采用临时出题，不使用确定性题库或预置题目。Workspace Tool `章节练习题生成器`（Tool ID：`course_practice_generator`）只负责校验课程、章节、难度、数量、题型、学生水平和答案开关，并返回结构化出题任务；课程 AI 助教再结合统一知识库 `course-knowledge-base` 的实际检索片段生成题目。工具源码和详细约束见 `tools/course_practice_generator.py` 与 `configs/course-tools/course-practice-generator.md`。
+
+先做不写入 Open WebUI 的源码检查：
+
+```bash
+.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080 --dry-run
+```
+
+设置本机管理员凭据后同步工具（已存在时更新，不重复创建）：
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080
+```
+
+可用 `--tool-id` 和 `--name` 覆盖默认值。工具支持 `course`、`chapter`、`difficulty`、`count`、`question_types`、`student_level`、`include_answer`；输出必须同时包含结构化 JSON 和 Markdown。默认不输出完整答案，显式开启 `include_answer` 时也只提供受控的参考思路、评分要点或简要答案。
+
+Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI、Git/GitHub、数学建模、学生水平、答案开关、无资料拒答、虚构引用防护和结构化输出等实际对话验收。脱敏结果位于 `docs/tools/verification-results.json`，交互过程位于 `interactions/eco-NIN/interactions.md`。
+
 ## 目录结构
 
 ```
@@ -138,6 +160,10 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 │   ├── README.md          # 记录约定说明
 │   ├── psa1K/
 │   └── eco-NIN/
+├── tools/                 # Open WebUI Workspace Tools
+│   └── course_practice_generator.py
+├── configs/course-tools/  # 工具用途、参数和输出规范
+├── docs/tools/            # 工具验收记录
 ├── knowledge/             # 课程知识库原始资料
 │   ├── README.md          # 资料索引
 │   ├── codex-course/      # Codex 实战课程（14 单元 MD + PDF + 示例代码）
@@ -158,6 +184,8 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 - Issue #16 脱敏验收结果：`docs/rag/verification-results.json`
 - Issue #17 助教配置：`configs/course-assistant/`
 - Issue #17 验收记录：`docs/assistant/verification-results.json`
+- Issue #18 工具配置：`configs/course-tools/course-practice-generator.md`
+- Issue #18 验收记录：`docs/tools/verification-results.json`
 
 Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
 

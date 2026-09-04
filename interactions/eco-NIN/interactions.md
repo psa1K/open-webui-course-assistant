@@ -141,3 +141,35 @@
 ## 脱敏说明
 
 本记录不包含管理员密码、API Key、Bearer Token、`.env` 内容、本地数据库内容或完整认证响应。命令中的密码统一使用“你的管理员密码”等占位符。
+
+## 交互 14 — Issue #18 方案确定：临时出题而非固定题库
+
+- **时间**：2026-09-04
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：继续完成 Issue #18，先澄清练习题功能的实现方式。
+- **Prompt（要点）**：用户明确要求“应该是章节练习题生成器，指定输入，生成题目，按照结构化约束输出”，并进一步说明“不是确定性题库，是临时出题，按照约束输出”。
+- **Agent 关键输出**：确定采用 Open WebUI Workspace Tool；工具只校验输入并返回临时出题任务，不保存题目、不读取数据库、不联网、不调用模型；课程 AI 助教检索 `course-knowledge-base` 后临时生成 JSON + Markdown 题目。
+- **采纳的决策**：不新增固定题库；固定输入字段为课程、章节、难度、数量、题型、学生水平和答案开关；默认不输出完整答案。
+- **问题与解决**：创建嵌套命名分支时遇到 Git 引用路径冲突，改用 `feat/eco-nin-issue-18` 功能分支继续开发，未修改 main。
+
+## 交互 15 — Issue #18 工具与同步脚本实现
+
+- **时间**：2026-09-04
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：实现章节练习题临时生成器、Open WebUI 同步脚本、配置文档和离线测试。
+- **Prompt（要点）**：按 Issue #18 计划实现 `course_practice_generator`，支持严格输入校验、`temporary_generation` 任务、结构化输出约束、引用和学术诚信规则，并提供创建/更新/dry-run 流程。
+- **Agent 关键输出**：新增 `tools/course_practice_generator.py`、`scripts/create_course_tool.py`、`configs/course-tools/course-practice-generator.md`、`tests/test_course_tool.py` 和脱敏的 `docs/tools/verification-results.json`；更新课程助教系统提示词和根目录 README。
+- **验证结果**：`py_compile` 与 `unittest discover -s tests` 通过，共 39 项测试；结果记录暂为待本机 Open WebUI 实际同步和对话验收，未宣称 Issue #18 完成。
+- **安全检查**：工具源码不包含网络请求、数据库访问、密码、Token 或 API Key；同步脚本通过环境变量读取管理员凭据并使用 `trust_env=False`。
+
+
+## 交互 16 — Issue #18 实际验收通过并准备提交
+
+- **时间**：2026-09-04
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：用户确认真实功能验收执行成功，请提交 Issue #18。
+- **Prompt（要点）**：确认章节练习题生成器已完成真实 Open WebUI 同步和对话验收，提交 Issue #18。
+- **Agent 关键输出**：将 Issue #18 从“待真实验收”更新为已通过；验收记录补充工具同步、9 类对话场景、结构化 JSON + Markdown、真实来源、无资料拒答、虚构引用防护和答案开关检查。
+- **验收结果**：用户确认本机真实功能验收成功；记录使用 `deepseek-v4-flash` 和统一 Knowledge `course-knowledge-base`，不保存认证信息或完整对话敏感内容。
+- **采纳的决策**：README 将 Issue #18 标记为完成；保持临时生成方案，不新增固定题库；随后通过功能分支提交 PR，等待用户审核，不自动合并。
+- **问题与解决**：此前仅有离线和 dry-run 结果；本次根据用户提供的实际验收成功反馈更新脱敏结果，并在提交前重新运行离线测试和差异检查。
