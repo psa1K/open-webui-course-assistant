@@ -36,7 +36,7 @@ def main() -> None:
     args = parser.parse_args()
     base = args.base.rstrip("/")
 
-    with httpx.Client(timeout=120.0) as client:
+    with httpx.Client(timeout=120.0, trust_env=False) as client:
         response = client.post(f"{base}/api/v1/auths/signin", json={"email": env("OPENWEBUI_EMAIL"), "password": env("OPENWEBUI_PASSWORD")})
         response.raise_for_status()
         headers = {"Authorization": f"Bearer {response.json()['token']}"}

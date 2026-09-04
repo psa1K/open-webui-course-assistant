@@ -103,7 +103,7 @@ def main() -> None:
     root = Path(args.root).resolve()
     files = source_files(root)
 
-    with httpx.Client(timeout=60.0) as client:
+    with httpx.Client(timeout=60.0, trust_env=False) as client:
         token = login(client, base)
         headers = {"Authorization": f"Bearer {token}"}
         knowledge_id = ensure_knowledge(client, base, headers, args.reset)
