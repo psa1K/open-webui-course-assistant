@@ -94,6 +94,7 @@ curl -X POST http://localhost:8080/openai/config/update \
 │   ├── export_units.py    # 把课程 HTML 拆分为单元 Markdown
 │   └── upload_knowledge.py# 上传 knowledge/ 到 Open WebUI 知识库
 ├── interactions/          # 成员与 AI Agent 的交互记录
+│   ├── README.md          # 记录约定说明
 │   ├── psa1K/
 │   └── eco-NIN/
 ├── knowledge/             # 课程知识库原始资料
