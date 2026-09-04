@@ -11,6 +11,7 @@ import httpx
 
 DEFAULT_BASE = "http://localhost:8080"
 KNOWLEDGE_NAME = "course-knowledge-base"
+EXPECTED_SOURCE_FILE_COUNT = 18
 
 
 def required_env(name: str) -> str:
@@ -32,13 +33,15 @@ def login(client: httpx.Client, base: str) -> str:
 def ensure_knowledge(client: httpx.Client, base: str, headers: dict[str, str], reset: bool) -> str:
     response = client.get(f"{base}/api/v1/knowledge/", headers=headers)
     response.raise_for_status()
-    for item in response.json().get("items", []):
-        if item.get("name") == KNOWLEDGE_NAME:
-            if not reset:
-                return item["id"]
-            delete = client.delete(f"{base}/api/v1/knowledge/{item['id']}/delete", headers=headers)
-            delete.raise_for_status()
-            break
+    matches = [item for item in response.json().get("items", []) if item.get("name") == KNOWLEDGE_NAME]
+    if matches and not reset:
+        if len(matches) != 1:
+            raise RuntimeError(f"Expected exactly one {KNOWLEDGE_NAME}, found {len(matches)}; rerun with --reset")
+        return matches[0]["id"]
+
+    for item in matches:
+        delete = client.delete(f"{base}/api/v1/knowledge/{item['id']}/delete", headers=headers)
+        delete.raise_for_status()
 
     response = client.post(
         f"{base}/api/v1/knowledge/create",
@@ -68,8 +71,10 @@ def wait_for_processing(client: httpx.Client, base: str, headers: dict[str, str]
 
 def source_files(root: Path) -> list[Path]:
     files = sorted(path for path in (root / "knowledge").rglob("*") if path.is_file() and path.name != "README.md")
-    if not files:
-        raise RuntimeError(f"No knowledge files found under {root / 'knowledge'}")
+    if len(files) != EXPECTED_SOURCE_FILE_COUNT:
+        raise RuntimeError(
+            f"Expected {EXPECTED_SOURCE_FILE_COUNT} knowledge files under {root / 'knowledge'}, found {len(files)}"
+        )
     return files
 
 

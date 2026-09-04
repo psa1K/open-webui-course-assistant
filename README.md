@@ -14,7 +14,7 @@
 - [x] 系统部署：Open WebUI 已在本机通过 pip/uv 方式部署并启动（[#14](https://github.com/psa1K/open-webui-course-assistant/issues/14)）
 - [x] 模型接入：已连接 DeepSeek API（deepseek-v4-flash / deepseek-v4-pro / deepseek-v4-flash-vision-exp），管理员账号已创建
 - [x] 课程知识库搭建（[#15](https://github.com/psa1K/open-webui-course-assistant/issues/15)）：`codex-course`（16 个文件）+ `math-modeling`（2 个文件），RAG 检索已验证
-- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：已完成统一知识库上传脚本、引用配置和 API 验证工具；需在本地管理员凭据和 Open WebUI 服务可用后执行真实验证
+- [ ] 统一课程知识库 RAG 检索与引用（[#16](https://github.com/psa1K/open-webui-course-assistant/issues/16)）：统一知识库上传、实际检索和最终回答验收脚本已完成；只有 6 类回答测试全部通过后才能标记完成
 - [ ] 课程 AI 助教（[#17](https://github.com/psa1K/open-webui-course-assistant/issues/17)）
 - [ ] 自定义扩展功能（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18) 等）
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
@@ -89,14 +89,19 @@ curl -X POST http://localhost:8080/openai/config/update \
 ```bash
 export OPENWEBUI_EMAIL="你的管理员邮箱"
 export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/upload_knowledge.py --reset
+# 若本机环境设置了代理，推荐使用 127.0.0.1 避免 localhost 请求被代理转发
+.venv/bin/python scripts/upload_knowledge.py --base http://127.0.0.1:8080 --reset
 ```
 
-脚本会将 `knowledge/` 下 Codex 实战课程和数学建模资料全部上传到同一个 `course-knowledge-base` 知识库。若服务不在默认地址，可使用 `--base http://localhost:8080`。上传完成后运行：
+脚本会将 `knowledge/` 下 Codex 实战课程和数学建模资料全部上传到同一个 `course-knowledge-base` 知识库。若服务不在默认地址，可使用 `--base http://localhost:8080`。上传完成后运行最终回答验收（脚本会自动发现模型，也可显式指定）：
 
 ```bash
-.venv/bin/python scripts/verify_rag.py
+.venv/bin/python scripts/verify_rag.py --base http://127.0.0.1:8080
+# 或：
+.venv/bin/python scripts/verify_rag.py --base http://127.0.0.1:8080 --model "模型名称"
 ```
+
+脚本会在同一个 `course-knowledge-base` 上执行 6 类测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护、引用格式检查。结果写入 `docs/rag/verification-results.json`；输出文件只保留脱敏的命中片段摘要和验收字段，不保存密码、token、API Key 或本地数据库。
 
 ## 目录结构
 
@@ -130,9 +135,9 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 - Issue #16 配置：`configs/course-knowledge-base/`
 - Issue #16 测试模板：`tests/rag-test-template.md`
-- Issue #16 API 检索结果：`docs/rag/verification-results.json`
+- Issue #16 脱敏验收结果：`docs/rag/verification-results.json`
 
-测试结果由本地 Open WebUI 实际运行生成；调参应依据检索结果优化 Top-K 和相关性阈值。
+Issue #16 的“完成”只表示 6 类最终回答测试全部通过，不能仅凭上传成功或检索接口返回片段宣称完成。未通过时应根据真实命中质量调整 Top-K 和相关性阈值，而不是修改提示词掩盖检索问题。
 
 ## 相关链接
 
