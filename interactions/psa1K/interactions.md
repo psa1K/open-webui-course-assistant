@@ -122,3 +122,28 @@
   | function calling 验证而非 REST execute | Workspace Tool 由对话内模型调用，无独立 execute 端点 |
 - **遇到的问题与解决**：直接 REST 调用工具执行端点返回 405；读源码确认 Workspace Tool 仅在 chat 中由模型调用，改用 chat/completions + `tool_ids` 验证。
 - **结果**：工具已安装并可用；待办——本机尚需同步统一知识库与助教（`upload_knowledge.py --reset` + `create_course_assistant.py`）。
+
+---
+
+## 交互 6 — 随机抽题工具实现与安装（issue #19）
+
+- **时间**：2026-09-04 13:40
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **任务**：认领并完成 issue #19「自定义扩展：随机抽题工具」——基于真实题库按章节/难度/题型随机抽题。
+- **Agent 输出（要点）**：
+  1. 编写题库 `data/question-bank.json`：23 题（codex 16 题 + math-modeling 7 题），三档难度、五种题型，每题标注来源文件与章节（来源全部真实存在于 knowledge/）。
+  2. 实现工具 `tools/random_question_picker.py`：参数校验（course/chapter 模糊匹配/difficulty/question_type/count 1-10/include_answer/seed 可复现抽取）、无匹配时报 NO_MATCHING_QUESTIONS、默认不含答案。
+  3. 安装器 `scripts/create_random_picker_tool.py`：校验题库完整性（题量≥8、必填字段、来源真实）后把题库内嵌进工具源码（Workspace Tool 无文件系统访问），dry-run + create。
+  4. 测试 `tests/test_random_picker_tool.py` 18 项（种子可复现、答案策略、输入校验、来源存在性、安装器内嵌/防篡改），全量 57 项回归通过。
+  5. 配置文档 `configs/course-tools/random-question-picker.md`。
+  6. 本机 Open WebUI 安装成功（bank=23 内嵌），chat function calling 中模型正确发起 `pick_random_questions` 调用。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 题库 JSON 入库 + 安装器内嵌 | 题库可维护可审查；Workspace Tool 沙箱无文件系统，运行时必须内嵌 |
+  | seed 参数支持复现 | 题目固定可定位，便于测试与复习，区别于 #18 的临时生成 |
+  | 选择题答案取 options[answer_index] | 答案确定；简答/建模题只给参考要点，避免代写 |
+- **遇到的问题与解决**：
+  - 题库内嵌后 `json.loads` 报 TypeError：占位符替换时丢了 `json.dumps()` 包裹，注入成了 dict 字面量；改为对 JSON 字符串再编码成字符串字面量。
+  - 测试假定抽到选择题但 seed 命中简答题：拆分为两个用例，选择题校验精确答案、简答题校验参考要点前缀。
+- **结果**：#19 完成——题库+工具+安装器+测试+文档齐备，本机已安装并验证可调用。
