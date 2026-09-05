@@ -152,7 +152,7 @@
 ## 交互 8 — 客观题自动判分工具（issue #20）
 
 - **时间**：2026-09-05 11:20
-- **Agent/模型**：opencode / glm-5.3-flash
+- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
 - **任务**：认领并完成 issue #20「自定义扩展：客观题自动判分工具」——输入学生答案与标准答案，输出判分与解析。
 - **Agent 输出（要点）**：
   1. 实现 `tools/objective_grader.py`：两种模式——`grade_from_bank`（对照题库内嵌标准答案判分）与 `grade_answers`（调用方直接给题的通用判分）。
