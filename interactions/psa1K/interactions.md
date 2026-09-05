@@ -107,8 +107,8 @@
 
 ## 交互 5 — 同步队友改动与课程工具安装（issue #18）
 
-- **时间**：2026-09-04 12:30
-- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **时间**：2026-09-05 01:10
+- **Agent/模型**：opencode / glm-5.3-flash
 - **任务**：同步远程仓库（队友 PR #40-#43），审阅 #16/#17 交付；在本机 Open WebUI 安装 `create_course_tool.py` 对应的 Workspace Tool（issue #18）。
 - **Agent 输出（要点）**：
   1. 同步：远程 main 领先 15 提交，`git pull` 完成同步；队友交付统一知识库 `course-knowledge-base`（18 文件）、RAG 验证（6 类通过）、课程助教（`course-ai-assistant`）。
@@ -127,8 +127,8 @@
 
 ## 交互 6 — 随机抽题工具实现与安装（issue #19）
 
-- **时间**：2026-09-04 13:40
-- **Agent/模型**：opencode / DeepSeek-V4-Flash-0731
+- **时间**：2026-09-05 10:30
+- **Agent/模型**：opencode / glm-5.3-flash
 - **任务**：认领并完成 issue #19「自定义扩展：随机抽题工具」——基于真实题库按章节/难度/题型随机抽题。
 - **Agent 输出（要点）**：
   1. 编写题库 `data/question-bank.json`：23 题（codex 16 题 + math-modeling 7 题），三档难度、五种题型，每题标注来源文件与章节（来源全部真实存在于 knowledge/）。
