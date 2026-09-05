@@ -16,7 +16,7 @@ This project is developed with AI coding tools such as Codex / Claude / opencode
 - Location: `interactions/<github-username>/` directory
 - Naming: each member keeps **exactly one** Markdown file in their own directory, named `interactions.md`
 - Content: **each interaction** includes
-  - **Time**: when the interaction happened (e.g. `2026-09-03 17:10`)
+  - **Time**: when the interaction actually happened — use the **real timestamp**, not a fabricated one. Verify against `git log` (the commit/PR time) and record that exact time (e.g. `2026-09-03 17:10`). Do not invent or guess times.
   - **Agent/Model**: the agent and model used (e.g. `opencode / DeepSeek-V4-Flash-0731`)
   - Task description and the prompt used
   - Key output from the agent (summarized as needed)
