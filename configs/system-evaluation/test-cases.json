@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "title": "Issue #25 固定系统测试用例",
+  "immutability_rule": "基线测试完成后，不得为了提高通过率修改本文件；任何变更必须在优化提案和前后对比中说明。",
+  "cases": [
+    {"id":"SYS-01","category":"知识问答","input":"Codex 有哪些使用入口？","mode":"chat","required_sources":["02-codex-的使用入口-app-cli-ide-web-怎么选.md"],"answer_terms":["app","cli","ide","web"]},
+    {"id":"SYS-02","category":"知识问答","input":"如何安装 Codex CLI？","mode":"chat","required_sources":["06-codex-cli-安装与上手.md"],"answer_terms":["npm","@openai/codex"]},
+    {"id":"SYS-03","category":"知识问答","input":"KMP 算法中前缀函数和模式匹配过程有什么关系？请用通俗语言解释。","mode":"chat","required_source_groups":[["Lecture1.pdf","Lecture1.tex"]],"answer_terms":["前缀","匹配"]},
+    {"id":"SYS-04","category":"知识问答","input":"MCP 是什么？在课程项目中有什么作用？","mode":"chat","required_sources":["12-核心功能-mcp-与-git-github-工作流.md"],"answer_terms":["mcp"]},
+    {"id":"SYS-05","category":"知识问答","input":"第三方模型接入时需要注意哪些配置？","mode":"chat","required_sources":["08-第三方模型接入.md"],"answer_terms":["api","模型"]},
+    {"id":"SYS-06","category":"综合分析","input":"结合模型接入和 Git/GitHub 工作流，给出一个小组项目协作流程。","mode":"chat","required_sources":["08-第三方模型接入.md","12-核心功能-mcp-与-git-github-工作流.md"],"answer_terms":["git","模型"]},
+    {"id":"SYS-07","category":"综合分析","input":"以 Codex 项目分析和本地启动为例，给出排查项目无法启动的步骤。","mode":"chat","required_sources":["04-case-1-项目分析与本地启动.md"],"answer_terms":["启动","项目"]},
+    {"id":"SYS-08","category":"综合分析","input":"根据课程资料说明如何把一个复杂学习任务拆分为可执行步骤；若资料不足请明确说明。","mode":"chat_or_refusal","answer_terms":["步骤","任务"]},
+    {"id":"SYS-09","category":"知识库无答案","input":"2035 年火星城市的官方人口是多少？","mode":"no_answer"},
+    {"id":"SYS-10","category":"知识库无答案","input":"量子纠缠目前最远可以稳定传输多少公里？","mode":"no_answer"},
+    {"id":"SYS-11","category":"练习题生成","input":"请根据 Codex CLI 章节生成 2 道中等难度简答题，适合基础学生，不要完整答案。","mode":"chat_tool","tool_id":"course_practice_generator","required_sources":["06-codex-cli-安装与上手.md"],"answer_terms":["第 1","第 2"],"tool_expectations":{"requested_count":2,"include_answer":false}},
+    {"id":"SYS-12","category":"练习题批改","input":"请调用客观题自动判分工具，按题库批改答案 {\"CX-001\": \"B\", \"CX-004\": \"A\"}，给出分数、每题判断和改进建议。","mode":"chat_tool","tool_id":"objective_grader","answer_terms":["50","CX-001","CX-004"],"tool_expectations":{"correct_count":1,"graded_count":2}},
+    {"id":"SYS-13","category":"自定义工具调用","input":"请调用课程章节查询工具，查询 MCP 相关课程章节和资料位置。","mode":"chat_tool","tool_id":"course_catalog_query","answer_terms":["CX-12","12-核心功能-mcp-与-git-github-工作流.md"]},
+    {"id":"SYS-14","category":"自定义工具调用","input":"请调用知识点先修关系查询工具，查询 MCP Server 的前置知识点和后续知识点，并包含间接关系。","mode":"chat_tool","tool_id":"knowledge_prerequisite_query","answer_terms":["MCP Server","前置","后续"]},
+    {"id":"SYS-15","category":"错误输入/异常","input":"请调用章节练习题生成器：课程 codex，章节 Codex CLI，难度 medium，生成 0 道题。请原样返回工具校验结果。","mode":"chat_tool","tool_id":"course_practice_generator","answer_terms":["INVALID_INPUT","count"]}
+  ]
+}

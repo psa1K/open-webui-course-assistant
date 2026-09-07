@@ -205,3 +205,14 @@
 - **Agent 关键输出**：将 README 中 Issue #24 更新为已完成，并记录用户已在本机 Open WebUI 成功同步工具、完成知识点查询和先修/后续关系返回的实际调用验收。
 - **采纳的决策**：实际验收由用户确认后才更新完成状态；不在仓库中记录管理员凭据、Token 或完整对话内容。
 - **验证结果**：此前离线测试、dry-run 和差异检查均通过；本次补充本机 Open WebUI 实际同步与调用成功反馈，满足工具“可在 Open WebUI 中调用”的验收条件。
+
+## 交互 20 — Issue #25 系统测试与评价基线框架
+
+- **时间**：2026-09-07 22:16（Asia/Shanghai，实际交互时间）
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：实现 Issue #25 的两轮系统测试与评价流程；第一轮测试后提出逐项优化建议，任何运行配置优化均须由用户逐项批准后才能实施并进行第二轮复测。
+- **Prompt（要点）**：不少于 15 个测试问题，覆盖知识问答、综合分析、知识库无答案、练习题生成/批改、自定义工具调用和错误输入；每题归档实际输出、引用准确性、正确性、问题和改进方式；必须留存优化前后对比。
+- **Agent 关键输出**：新增固定 15 用例配置 `configs/system-evaluation/test-cases.json`、真实 Open WebUI 聊天/RAG API 测试脚本 `scripts/verify_system_evaluation.py`、离线回归测试和 `docs/system-evaluation/` 归档说明。脚本会在基线运行后生成脱敏 `baseline-results.json` 与 `optimization-proposal.md`；工具题同时通过 Open WebUI API 核验已部署的 Tool ID 和源码，并记录固定输入的结构化工具输出。
+- **采纳的决策**：两轮使用同一份固定用例；第一轮只测量和归档，不修改系统提示词、知识库、切分、检索参数、工具或模型；优化提案的每项均标记为“等待用户批准”，只有用户明确批准后才允许创建批准记录、实施对应改动并运行 `--phase optimized`。
+- **验证结果**：`py_compile`、`unittest discover -s tests`（159 项）与 `git diff --check` 通过。当前 Codex 终端未设置 Open WebUI 管理员凭据，且 `http://127.0.0.1:8080` 不可连接，因此尚未执行或伪造第一轮真实 API 结果；Issue #25 保持未完成。
+- **安全检查**：结果写入前会脱敏密码、Token、API Key 与 Authorization 字段；仓库不记录 `.env`、管理员凭据或本地数据库。
