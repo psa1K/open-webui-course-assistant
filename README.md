@@ -19,6 +19,7 @@
 - [x] 章节练习题临时生成器（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18)）：已同步 `course_practice_generator`，并完成本机 Open WebUI 实际对话验收
 - [x] 随机抽题工具（[#19](https://github.com/psa1K/open-webui-course-assistant/issues/19)）：真实题库（23 题，来源 knowledge/ 资料）+ `random_question_picker` 已安装，function calling 验证通过
 - [x] 客观题自动判分工具（[#20](https://github.com/psa1K/open-webui-course-assistant/issues/20)）：`objective_grader` 真实结构化判分（选择/多选/填空/判断），题库对照或通用两种模式，已安装并验证
+- [ ] 学习计划生成工具（[#21](https://github.com/psa1K/open-webui-course-assistant/issues/21)）：`study_plan_generator` 根据结构化课程目录和用户目标/时间/水平约束生成分阶段计划；离线验证已通过，待本机 Open WebUI 实际同步与调用验收
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
@@ -201,10 +202,25 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 - Issue #19 题库：`data/question-bank.json`；离线测试：`tests/test_random_picker_tool.py`
 - Issue #20 工具配置：`configs/course-tools/objective-grader.md`
 - Issue #20 测试：`tests/test_objective_grader_tool.py`
+- Issue #21 工具配置：`configs/course-tools/study-plan-generator.md`；源码：`tools/study_plan_generator.py`；安装脚本：`scripts/create_study_plan_tool.py`；离线测试：`tests/test_study_plan_tool.py`
 - Issue #22 工具配置：`configs/course-tools/course-catalog-query.md`
 - Issue #22 目录：`data/course-catalog.json`；离线测试：`tests/test_course_catalog_tool.py`
 - Issue #23 工具配置：`configs/course-tools/test-case-generator.md`
 - Issue #23 测试：`tests/test_test_case_generator_tool.py`
+
+
+## 学习计划生成工具（Issue #21）
+
+`学习计划生成工具`（Tool ID：`study_plan_generator`）接受学习目标、计划时长、课程、学生水平、每周学习时长和偏好章节，基于 `data/course-catalog.json` 的结构化章节数据返回分阶段计划生成任务。工具不保存固定计划，也不调用网络或数据库；Open WebUI 中的课程 AI 助教依据真实目录生成 JSON + Markdown 计划，并标注章节来源。
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080
+```
+
+同步成功后，在 Open WebUI 的“工作空间 → 工具”中选择“学习计划生成工具”。配置说明和调用示例见 `configs/course-tools/study-plan-generator.md`。
 
 Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
 
