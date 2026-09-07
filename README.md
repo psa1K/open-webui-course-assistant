@@ -20,6 +20,7 @@
 - [x] 随机抽题工具（[#19](https://github.com/psa1K/open-webui-course-assistant/issues/19)）：真实题库（23 题，来源 knowledge/ 资料）+ `random_question_picker` 已安装，function calling 验证通过
 - [x] 客观题自动判分工具（[#20](https://github.com/psa1K/open-webui-course-assistant/issues/20)）：`objective_grader` 真实结构化判分（选择/多选/填空/判断），题库对照或通用两种模式，已安装并验证
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
+- [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
@@ -167,7 +168,8 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 │   ├── course_practice_generator.py
 │   ├── random_question_picker.py
 │   ├── objective_grader.py
-│   └── course_catalog_query.py
+│   ├── course_catalog_query.py
+│   └── test_case_generator.py
 ├── data/
 │   ├── question-bank.json # 随机抽题题库（23 题，来源 knowledge/ 资料）
 │   └── course-catalog.json# 结构化课程目录（22 章，章节/知识点/资料位置）
@@ -201,6 +203,8 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 - Issue #20 测试：`tests/test_objective_grader_tool.py`
 - Issue #22 工具配置：`configs/course-tools/course-catalog-query.md`
 - Issue #22 目录：`data/course-catalog.json`；离线测试：`tests/test_course_catalog_tool.py`
+- Issue #23 工具配置：`configs/course-tools/test-case-generator.md`
+- Issue #23 测试：`tests/test_test_case_generator_tool.py`
 
 Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
 

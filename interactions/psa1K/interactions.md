@@ -195,3 +195,29 @@
 - **遇到的问题与解决**：
   - Open WebUI 服务随 WSL 会话关闭而停止：重启 `open-webui serve` 并等待 SentenceTransformer 加载完成后恢复健康检查。
 - **结果**：#22 完成——目录数据+查询工具+安装器+测试+文档齐备，本机已安装并验证可调用。
+
+---
+
+## 交互 9 — 编程题测试用例生成工具（issue #23）
+
+- **时间**：2026-09-07 19:19
+- **Agent/模型**：opencode / deepseek-v4-pro-0813
+- **任务**：认领并完成 issue #23「自定义扩展：编程题测试用例生成工具」——输入题目描述，输出测试用例（输入/期望输出）。
+- **Agent 输出（要点）**：
+  1. 实现 `tools/test_case_generator.py`：两种模式——`generate_test_cases`（7 个内置课程相关算法模板：KMP 前缀函数、KMP 模式匹配、阶乘、斐波那契、最大公约数、两数之和、最大子数组和，每个带真实参考实现）与 `generate_with_reference`（调用方提供 `def solve(data)` 参考解 + 输入规格）。
+  2. 真实可运行：期望输出由参考实现**实际计算**得到，非模型猜测；参考解在**受限命名空间**运行（仅暴露安全纯函数内建，无 open/import/__import__/eval/exec/subprocess）。
+  3. 输入生成器支持 `int / int_pair / int_list / str / two_sum / kmp` 六种规格，支持 seed 复现、约束覆盖、count 1–20 校验。
+  4. 安装器 `scripts/create_test_case_generator_tool.py`：校验工具方法、内置模板数 ≥5、受限命名空间存在、无网络/数据库/敏感依赖后上传。
+  5. 测试 `tests/test_test_case_generator_tool.py` 23 项（参考解正确性、seed 复现、约束覆盖、JSON 可序列化、受限命名空间拦截 open/import、未知模板/非法输入等），全量 125 项回归通过。
+  6. 配置文档 `configs/course-tools/test-case-generator.md`。
+  7. 本机 Open WebUI 安装成功（templates=7），chat function calling 中模型正确发起 `generate_test_cases(problem_key=two_sum, count=3, seed=1)` 调用。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 参考实现实算期望输出 | 满足「生成真实可运行的测试用例数据」验收，而非占位/模拟 |
+  | 受限命名空间执行自定义参考解 | 允许灵活自定义，同时隔离文件系统/网络/系统命令，保证安全 |
+  | 内置模板覆盖 KMP 等课程知识点 | 与数学建模课程内容衔接，测试用例可直接用于教学 |
+- **遇到的问题与解决**：
+  - 受限命名空间下 `open('/etc/passwd')` 抛 `NameError` 未被捕获导致崩溃：改为 `except Exception` 兜底，且无任何结果时返回 `REFERENCE_ERROR` 而非静默崩溃。
+  - gcd 模板误用 two_sum 输入规格（多出无关 target 字段）：新增 `int_pair` 输入类型，输出 `{"a":…,"b":…}`。
+- **结果**：#23 完成——工具+安装器+测试+文档齐备，本机已安装并验证可调用。
