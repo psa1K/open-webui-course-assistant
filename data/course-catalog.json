@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "codex",
+      "name": "Codex 实战课程",
+      "chapters": [
+        {
+          "id": "CX-00",
+          "title": "协作工具与环境准备",
+          "type": "课件",
+          "keywords": ["协作工具", "环境准备", "Git", "GitHub", "团队协作"],
+          "knowledge_points": ["协作工具", "环境准备", "版本控制"],
+          "sections": ["协作工具", "环境准备"],
+          "source": {"file": "00-协作工具-环境准备.pdf", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-01",
+          "title": "认识 Codex：从代码补全到工程 Agent",
+          "type": "课件",
+          "keywords": ["Codex 是什么", "工程 Agent", "AI 编程工具", "角色变化", "代码补全"],
+          "knowledge_points": ["工程 Agent", "AI 编程工具演变", "角色变化"],
+          "sections": ["一句话结论", "Codex 到底是什么", "五年变了四次"],
+          "source": {"file": "01-认识-codex-从代码补全到工程-agent.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-02",
+          "title": "Codex 的使用入口：App / CLI / IDE / Web 怎么选",
+          "type": "课件",
+          "keywords": ["使用入口", "App", "CLI", "IDE", "Web", "入口对比"],
+          "knowledge_points": ["使用入口"],
+          "sections": ["一句话结论", "Codex 的使用入口"],
+          "source": {"file": "02-codex-的使用入口-app-cli-ide-web-怎么选.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-03",
+          "title": "安装前的账号、系统与项目准备",
+          "type": "课件",
+          "keywords": ["安装准备", "账号", "系统", "项目准备"],
+          "knowledge_points": ["安装准备"],
+          "sections": ["一句话结论", "安装前准备"],
+          "source": {"file": "03-安装前的账号-系统与项目准备.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-04",
+          "title": "Case 1：项目分析与本地启动",
+          "type": "实验",
+          "keywords": ["Case 1", "项目分析", "本地启动", "实验"],
+          "knowledge_points": ["项目分析", "本地启动"],
+          "sections": ["目标", "任务", "交付物"],
+          "source": {"file": "04-case-1-项目分析与本地启动.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-05",
+          "title": "ChatGPT 桌面应用：Codex 模式安装与上手",
+          "type": "课件",
+          "keywords": ["桌面应用", "ChatGPT", "Codex 模式", "安装"],
+          "knowledge_points": ["桌面端安装"],
+          "sections": ["一句话结论", "Codex 桌面端安装与上手"],
+          "source": {"file": "05-chatgpt-桌面应用-codex-模式安装与上手.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-06",
+          "title": "Codex CLI 安装与上手",
+          "type": "课件",
+          "keywords": ["CLI 安装", "npm", "沙盒模式", "审批", "命令行"],
+          "knowledge_points": ["CLI 安装", "npm", "沙盒模式", "CLI 参数", "安全边界", "审批模式"],
+          "sections": ["一句话结论", "Codex CLI 安装与上手", "常用参数速查", "危险参数与高危操作"],
+          "source": {"file": "06-codex-cli-安装与上手.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-07",
+          "title": "Case 2：修改界面文案与品牌信息",
+          "type": "实验",
+          "keywords": ["Case 2", "界面文案", "品牌信息", "实验"],
+          "knowledge_points": ["界面文案", "品牌信息"],
+          "sections": ["目标", "任务", "交付物"],
+          "source": {"file": "07-case-2-修改界面文案与品牌信息.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-08",
+          "title": "第三方模型接入",
+          "type": "课件",
+          "keywords": ["第三方模型", "DeepSeek", "API Key", "模型配置", "baseURL"],
+          "knowledge_points": ["第三方模型", "API 配置"],
+          "sections": ["一句话结论", "第三方模型接入"],
+          "source": {"file": "08-第三方模型接入.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-09",
+          "title": "Case 3（可选）：增加一个快捷提示词功能",
+          "type": "实验",
+          "keywords": ["Case 3", "快捷提示词", "实验"],
+          "knowledge_points": ["快捷提示词"],
+          "sections": ["目标", "任务", "学生最终要实现的效果", "交付物"],
+          "source": {"file": "09-case-3-可选-增加一个快捷提示词功能.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-10",
+          "title": "核心功能：自动化、插件与 Skill",
+          "type": "课件",
+          "keywords": ["自动化", "插件", "Skill", "扩展能力"],
+          "knowledge_points": ["自动化", "Skill", "扩展能力", "协作"],
+          "sections": ["一句话结论", "自动化", "插件", "Skill"],
+          "source": {"file": "10-核心功能-自动化-插件与-skill.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-11",
+          "title": "Case 4：增加功能模块",
+          "type": "实验",
+          "keywords": ["Case 4", "功能模块", "实验"],
+          "knowledge_points": ["功能模块"],
+          "sections": ["目标", "任务", "交付物"],
+          "source": {"file": "11-case-4-增加功能模块.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-12",
+          "title": "核心功能：MCP 与 Git / GitHub 工作流",
+          "type": "课件",
+          "keywords": ["MCP", "Git", "GitHub", "工作流", "Pull Request"],
+          "knowledge_points": ["MCP", "Git 工作流", "Pull Request"],
+          "sections": ["一句话结论", "MCP(Model Context Protocol)", "代码管理（Git 与 GitHub 工作流）"],
+          "source": {"file": "12-核心功能-mcp-与-git-github-工作流.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-13",
+          "title": "核心功能：项目规则与记忆",
+          "type": "课件",
+          "keywords": ["项目规则", "记忆", "AGENTS.md"],
+          "knowledge_points": ["项目规则", "记忆"],
+          "sections": ["项目规则与本地记忆"],
+          "source": {"file": "13-核心功能-项目规则与记忆.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-14",
+          "title": "Case 5：封装课程信息 MCP Server",
+          "type": "实验",
+          "keywords": ["Case 5", "MCP Server", "封装", "实验"],
+          "knowledge_points": ["MCP Server", "工具封装"],
+          "sections": ["目标", "任务", "交付物"],
+          "source": {"file": "14-case-5-封装课程信息mcp-server.md", "dir": "knowledge/codex-course"}
+        },
+        {
+          "id": "CX-15",
+          "title": "课程信息 MCP Server 示例代码",
+          "type": "示例代码",
+          "keywords": ["示例代码", "courses_mcp01", "Python", "MCP Server"],
+          "knowledge_points": ["MCP Server", "示例代码"],
+          "sections": ["courses_mcp01.py"],
+          "source": {"file": "courses_mcp01.py", "dir": "knowledge/codex-course"}
+        }
+      ]
+    },
+    {
+      "id": "math-modeling",
+      "name": "数学建模课程",
+      "chapters": [
+        {
+          "id": "MM-01",
+          "title": "KMP 算法",
+          "type": "自编笔记",
+          "keywords": ["KMP", "前缀函数", "模式匹配", "字符串", "pi"],
+          "knowledge_points": ["KMP", "前缀函数", "算法推导"],
+          "sections": ["数学建模(DAY 1)", "KMP 算法"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "数学建模(DAY 1)"}
+        },
+        {
+          "id": "MM-02",
+          "title": "等价变化与重要假设",
+          "type": "自编笔记",
+          "keywords": ["等价变化", "重要假设", "模型化简", "适用边界"],
+          "knowledge_points": ["等价变化", "模型假设"],
+          "sections": ["数学建模(DAY 1)", "等价变化", "重要假设"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "数学建模(DAY 1)"}
+        },
+        {
+          "id": "MM-03",
+          "title": "问题规模与计算机硬件",
+          "type": "自编笔记",
+          "keywords": ["问题规模", "计算机硬件", "时间复杂度", "空间复杂度"],
+          "knowledge_points": ["问题规模", "硬件约束"],
+          "sections": ["计算机硬件与问题规模(DAY 2)", "问题规模", "计算机硬件"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "计算机硬件与问题规模(DAY 2)"}
+        },
+        {
+          "id": "MM-04",
+          "title": "组合优化",
+          "type": "自编笔记",
+          "keywords": ["组合优化", "优化模型", "变量", "目标函数", "约束条件", "离散"],
+          "knowledge_points": ["组合优化", "优化模型"],
+          "sections": ["数学补充(DAY 3)", "组合优化"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "数学补充(DAY 3)"}
+        },
+        {
+          "id": "MM-05",
+          "title": "图论",
+          "type": "自编笔记",
+          "keywords": ["图论", "顶点", "边", "权值", "图论建模"],
+          "knowledge_points": ["图论建模"],
+          "sections": ["模型与问题的差距(DAY4)", "图论"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "模型与问题的差距(DAY4)"}
+        },
+        {
+          "id": "MM-06",
+          "title": "统计",
+          "type": "自编笔记",
+          "keywords": ["统计", "统计模型", "数据推断", "规律"],
+          "knowledge_points": ["统计模型"],
+          "sections": ["模型与问题的差距(DAY4)", "统计"],
+          "source": {"file": "Lecture1.pdf", "dir": "knowledge/math-modeling", "section": "模型与问题的差距(DAY4)"}
+        }
+      ]
+    }
+  ]
+}
