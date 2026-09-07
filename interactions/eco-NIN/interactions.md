@@ -184,3 +184,14 @@
 - **采纳的决策**：沿用 `data/course-catalog.json` 的 Codex 与数学建模统一目录；计划由模型按用户约束临时生成；输出要求为结构化 JSON + Markdown，并为阶段标注真实目录来源；未知章节明确返回“资料中未找到相关信息”。
 - **验证结果**：本次完成代码、配置和测试实现；待用户在本机执行 dry-run/同步并进行 Open WebUI 实际调用后，再将 Issue #21 标记为真实部署完成。未记录密码、Token、API Key 或本地数据库。
 - **问题与解决**：Issue #21 页面此前无法从当前环境读取，用户补充标题和验收标准后按需求实现；创建 `codex/` 前缀分支因现有 Git 引用路径限制失败，改用符合仓库规范的 `feat/eco-nin-issue-21`，未修改 `main`。
+
+## 交互 18 — Issue #24 知识点先修关系查询工具
+
+- **时间**：2026-09-07 20:13（Asia/Shanghai，实际交互时间）
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：先更新本地项目，再实现 GitHub Issue #24「知识点先修关系查询工具」。
+- **Prompt（要点）**：输入知识点，输出其前置依赖与后续知识点；工具必须具有明确输入输出、可在 Open WebUI 调用，并基于结构化先修关系数据；实现代码与调用说明需留档。
+- **Agent 关键输出**：从 `origin/main` 快进同步至 `3916841` 并创建 `feat/eco-nin-prerequisite-query`；新增 `knowledge_prerequisite_query` Workspace Tool、`data/knowledge-prerequisites.json` 结构化关系图、Open WebUI 创建/更新脚本、调用说明和离线测试。查询结果引用真实课程章节和资料文件，支持 `include_indirect` 返回间接先修/后续关系。
+- **采纳的决策**：先修关系单独维护为“推荐学习依赖”，避免把课程资料未明示的关系伪装成原文结论；知识点与 `data/course-catalog.json` 的章节 ID 绑定，部署时同时内嵌两份结构化数据；无匹配时固定说明“资料中未找到相关信息”。
+- **验证结果**：`py_compile`、`unittest discover -s tests`（152 项）和 `git diff --check` 通过；创建脚本 `--dry-run` 确认将嵌入 22 个知识点和 20 条关系。尚未执行本机 Open WebUI 实际同步与调用，因此 README 未将 Issue #24 标记为完成。
+- **安全检查**：工具不联网、不访问数据库、不保存密码、Token、API Key 或本地数据库；创建脚本仅通过环境变量读取管理员凭据并使用 `trust_env=False`。

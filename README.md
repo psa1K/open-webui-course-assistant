@@ -22,6 +22,7 @@
 - [ ] 学习计划生成工具（[#21](https://github.com/psa1K/open-webui-course-assistant/issues/21)）：`study_plan_generator` 根据结构化课程目录和用户目标/时间/水平约束生成分阶段计划；离线验证已通过，待本机 Open WebUI 实际同步与调用验收
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
+- [ ] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点；待本机 Open WebUI 实际同步与调用验收
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
@@ -170,10 +171,12 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 │   ├── random_question_picker.py
 │   ├── objective_grader.py
 │   ├── course_catalog_query.py
-│   └── test_case_generator.py
+│   ├── test_case_generator.py
+│   └── knowledge_prerequisite_query.py
 ├── data/
 │   ├── question-bank.json # 随机抽题题库（23 题，来源 knowledge/ 资料）
-│   └── course-catalog.json# 结构化课程目录（22 章，章节/知识点/资料位置）
+│   ├── course-catalog.json # 结构化课程目录（22 章，章节/知识点/资料位置）
+│   └── knowledge-prerequisites.json # 知识点先修关系（结构化推荐学习依赖）
 ├── configs/course-tools/  # 工具用途、参数和输出规范
 ├── docs/tools/            # 工具验收记录
 ├── knowledge/             # 课程知识库原始资料
@@ -207,6 +210,7 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 - Issue #22 目录：`data/course-catalog.json`；离线测试：`tests/test_course_catalog_tool.py`
 - Issue #23 工具配置：`configs/course-tools/test-case-generator.md`
 - Issue #23 测试：`tests/test_test_case_generator_tool.py`
+- Issue #24 工具配置：`configs/course-tools/knowledge-prerequisite-query.md`；关系数据：`data/knowledge-prerequisites.json`；离线测试：`tests/test_prerequisite_query_tool.py`
 
 
 ## 学习计划生成工具（Issue #21）
@@ -223,6 +227,19 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 同步成功后，在 Open WebUI 的“工作空间 → 工具”中选择“学习计划生成工具”。配置说明和调用示例见 `configs/course-tools/study-plan-generator.md`。
 
 Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
+
+## 知识点先修关系查询工具（Issue #24）
+
+`知识点先修关系查询工具`（Tool ID：`knowledge_prerequisite_query`）使用 `data/knowledge-prerequisites.json` 的结构化推荐学习依赖关系，查询某个知识点的直接前置依赖和后续知识点；传入 `include_indirect=true` 可同时查看间接关系。每个结果均映射到 `data/course-catalog.json` 中的真实课程章节和知识资料文件；未知知识点会返回“资料中未找到相关信息”。
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080
+```
+
+同步后在 Open WebUI 的“工作空间 → 工具”中选择“知识点先修关系查询工具”。详细输入、输出和调用示例见 `configs/course-tools/knowledge-prerequisite-query.md`。本次实现完成离线校验后，仍需进行本机实际同步和调用验收，才可将 Issue #24 标记为完成。
 
 ## 相关链接
 
