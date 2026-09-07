@@ -22,7 +22,7 @@
 - [ ] 学习计划生成工具（[#21](https://github.com/psa1K/open-webui-course-assistant/issues/21)）：`study_plan_generator` 根据结构化课程目录和用户目标/时间/水平约束生成分阶段计划；离线验证已通过，待本机 Open WebUI 实际同步与调用验收
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
-- [ ] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点；待本机 Open WebUI 实际同步与调用验收
+- [x] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点，已完成本机 Open WebUI 同步与调用验收
 - [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
@@ -239,7 +239,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 .venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080
 ```
 
-同步后在 Open WebUI 的“工作空间 → 工具”中选择“知识点先修关系查询工具”。详细输入、输出和调用示例见 `configs/course-tools/knowledge-prerequisite-query.md`。本次实现完成离线校验后，仍需进行本机实际同步和调用验收，才可将 Issue #24 标记为完成。
+同步后在 Open WebUI 的“工作空间 → 工具”中选择“知识点先修关系查询工具”。详细输入、输出和调用示例见 `configs/course-tools/knowledge-prerequisite-query.md`。Issue #24 已完成：用户确认工具已成功同步到本机 Open WebUI，并完成知识点查询、直接/间接关系和资料来源返回的实际调用验收。
 
 ## 相关链接
 
