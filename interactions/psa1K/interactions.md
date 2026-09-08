@@ -258,3 +258,31 @@
   | 以「两轮真实测试 + 前后对比」为 #25 完成依据 | 与 eco-NIN 的归档结论一致，不把「归档」表述为「15 项全通过」 |
   | 未通过项保留为后续优化建议 | 不修改测试用例掩盖问题 |
 - **结果**：#25 关闭，13 个 issue 全部完成；报告同步更新。
+
+---
+
+## 交互 12 — 全仓库审查与修复（命名/结构/文档/CI）
+
+- **时间**：2026-09-08 19:01 – 19:04（8 个提交 19:01，PR #62 创建 19:04，经 git log 与 GitHub API 核实）
+- **Agent/模型**：opencode / glm-5.3-flash
+- **任务**：对整个仓库做一次审查（项目结构、文件命名、文件内容等），汇报问题后按指示「都修改吧」落实全部修复，并追加本次交互记录。
+- **Prompt（要点）**：①「审一下 projects/open-webui-course-assistant，包括项目结构，文件命名，文件内容等」；②「都修改吧」；③「请追加交互，glm-5.3-flash」。
+- **Agent 输出（要点）**：
+  1. **审查结论**：优点——无敏感信息入库、163 项离线测试全过、防编造/脱敏设计贯穿、数据与文档数字自洽（23 题/22 章/7 模板/18 文件）。问题——①同一工具在 tools/scripts/tests 三处名字不一致（5 组）；②README 目录树过时（scripts 只列 3/12 个，缺 configs 子目录、docs、tests）、题目文件引用错误（`2. 李正丹…docx` → 实际 `docs/李正丹-朱静雯老师的题目.docx`）、测试运行方式未写进文档；③`test_case_generator._parse_json` 有未用参数、`objective_grader` 用 lambda（PEP 8）；④`upload_knowledge.py` 硬编码 18 个文件；⑤占位符注入正则依赖 json.dumps 具体格式，较脆弱；⑥无 CI、无 LICENSE；⑦发现附带 bug：`create_course_assistant.py --dry-run` 在登录之后才生效，无法离线预检。
+  2. **修复**：重命名 5 个安装脚本 + 5 个测试模块为 `create_<tool_id>_tool.py` / `test_<tool_id>_tool.py`，同步 README、configs/course-tools、docs/tools、`verify_system_evaluation.py` 引用；占位符正则改为整行锚定注释标记；`--expected-count` 参数化；dry-run 移到登录前；README 目录树补全并新增「运行离线测试」章节；新增 GitHub Actions（Python 3.11/3.12 矩阵跑 163 项测试）与 MIT LICENSE。
+  3. **验证**：163 项测试全过；8 个安装/创建脚本 `--dry-run` 全过；工作区干净、无敏感信息。
+  4. 分支 `fix/review-findings` 上 8 个 Conventional Commits，REST API 创建 PR #62。
+- **采纳的决策**：
+  | 决策 | 理由 |
+  |---|---|
+  | 测试统一命名 `test_<tool_id>_tool.py` 而非 `test_<tool_id>.py` | 与既有 `test_objective_grader_tool.py` 等一致，避免 `test_test_case_generator` 双重前缀 |
+  | docs/system-evaluation 归档与 interactions/ 不改写旧文件名 | 历史记录保持原貌，只更新活跃文档 |
+  | 顺带修复 dry-run 需先登录的 bug | 与其余 7 个安装器的离线 dry-run 约定一致，README 也如此宣称 |
+  | 本地 main 先 fast-forward 到 origin/main 再开工 | 之前落后 4 个提交（PR #59-#61） |
+  | 交互记录随本分支提交（同一 PR） | 本次记录即审查会话本身，单一 PR 保留完整审计线索 |
+- **遇到的问题与解决**：
+  - pytest 不在 requirements.lock：测试实际用 `python -m unittest discover -s tests`，已写入 README。
+  - 疑似远程残留分支 `feat/eco-nin-issue-21` 未删：`git ls-remote` 核实已被清理（此前 `git fetch --prune` 输出被 `tail` 截断导致误判）。
+  - `git reset --mixed` 丢弃了 `git mv` 的暂存状态，提交分组两次中断：最终以 `git add -A` 显式列出新旧路径重做，8 个提交干净落地。
+  - 改名与正则改动落在同 4 个文件，导致正则改动分散在前两个提交：内容最终正确，不再重写已提交历史，在 PR 描述中如实说明。
+- **结果**：审查项全部处理完毕，PR #62（https://github.com/psa1K/open-webui-course-assistant/pull/62）待成员审批后合并；PR #60 产生的多余 merge commit 属已发布历史，不做改写。
