@@ -106,7 +106,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 .venv/bin/python scripts/upload_knowledge.py --base http://127.0.0.1:8080 --reset
 ```
 
-脚本会将 `knowledge/` 下 Codex 实战课程和数学建模资料全部上传到同一个 `course-knowledge-base` 知识库。若服务不在默认地址，可使用 `--base http://localhost:8080`。上传完成后运行最终回答验收（脚本会自动发现模型，也可显式指定）：
+脚本会将 `knowledge/` 下 Codex 实战课程和数学建模资料全部上传到同一个 `course-knowledge-base` 知识库。若服务不在默认地址，可使用 `--base http://localhost:8080`。脚本默认要求 `knowledge/`（不含 README.md）恰好 18 个文件（与 RAG 验收记录一致）；增删资料后请用 `--expected-count` 传入新数量，并在上传后重新运行验收。上传完成后运行最终回答验收（脚本会自动发现模型，也可显式指定）：
 
 ```bash
 .venv/bin/python scripts/verify_rag.py --base http://127.0.0.1:8080
@@ -123,18 +123,30 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 ├── README.md              # 本文件
 ├── .env.example           # 环境变量模板（真实密钥放本机 .env，不入库）
 ├── requirements.lock      # 依赖锁定（uv pip freeze，保证环境一致）
-├── scripts/
-│   ├── setup.sh           # 一键安装脚本
-│   ├── export_units.py    # 把课程 HTML 拆分为单元 Markdown
-│   └── upload_knowledge.py# 上传 knowledge/ 到 Open WebUI 知识库
+├── scripts/               # 部署、同步与验收脚本（每个工具对应一个 create_<tool_id>_tool.py）
+│   ├── setup.sh                                   # 一键安装脚本
+│   ├── export_units.py                            # 把课程 HTML 拆分为单元 Markdown
+│   ├── upload_knowledge.py                        # 上传 knowledge/ 到 Open WebUI 知识库
+│   ├── create_course_assistant.py                 # 创建/更新课程 AI 助教
+│   ├── create_course_practice_generator_tool.py   # 同步章节练习题生成器
+│   ├── create_random_question_picker_tool.py      # 同步随机抽题工具
+│   ├── create_objective_grader_tool.py            # 同步客观题自动判分工具
+│   ├── create_study_plan_generator_tool.py        # 同步学习计划生成工具
+│   ├── create_course_catalog_query_tool.py        # 同步课程章节查询工具
+│   ├── create_test_case_generator_tool.py         # 同步编程题测试用例生成工具
+│   ├── create_knowledge_prerequisite_query_tool.py# 同步知识点先修关系查询工具
+│   ├── verify_rag.py                              # RAG 6 类最终回答验收
+│   └── verify_system_evaluation.py                # 系统测试两轮运行
+├── tests/                 # 离线单元测试（unittest，无需运行 Open WebUI）
 ├── interactions/          # 成员与 AI Agent 的交互记录
 │   ├── README.md          # 记录约定说明
 │   ├── psa1K/
 │   └── eco-NIN/
-├── tools/                 # Open WebUI Workspace Tools
+├── tools/                 # Open WebUI Workspace Tools 源码（7 个）
 │   ├── course_practice_generator.py
 │   ├── random_question_picker.py
 │   ├── objective_grader.py
+│   ├── study_plan_generator.py
 │   ├── course_catalog_query.py
 │   ├── test_case_generator.py
 │   └── knowledge_prerequisite_query.py
@@ -142,8 +154,18 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 │   ├── question-bank.json # 随机抽题题库（23 题，来源 knowledge/ 资料）
 │   ├── course-catalog.json # 结构化课程目录（22 章，章节/知识点/资料位置）
 │   └── knowledge-prerequisites.json # 知识点先修关系（结构化推荐学习依赖）
-├── configs/course-tools/  # 工具用途、参数和输出规范
-├── docs/tools/            # 工具验收记录
+├── configs/               # 可复现配置归档
+│   ├── course-assistant/       # 课程 AI 助教配置与系统提示词
+│   ├── course-knowledge-base/  # 知识库 RAG 参数、引用规范与系统提示词
+│   ├── course-tools/           # 工具用途、参数和输出规范
+│   └── system-evaluation/      # 固定 15 项系统测试用例
+├── docs/                  # 验收记录、使用指南与总结报告
+│   ├── rag/                   # RAG 验收结果
+│   ├── assistant/             # 助教配置检查记录
+│   ├── tools/                 # 工具验收记录与使用目录
+│   ├── system-evaluation/     # 系统测试两轮归档
+│   ├── user-guide/            # 助教与知识库使用指南
+│   └── 项目总结报告.md
 ├── knowledge/             # 课程知识库原始资料
 │   ├── README.md          # 资料索引
 │   ├── codex-course/      # Codex 实战课程（14 单元 MD + PDF + 示例代码）
@@ -151,10 +173,19 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 └── .venv/                 # 虚拟环境（不入库）
 ```
 
+## 运行离线测试
+
+全部单元测试为离线测试，不需要运行中的 Open WebUI：
+
+```bash
+.venv/bin/python -m unittest discover -s tests
+```
+
 ## 克隆后验证清单
 
 - [ ] `./scripts/setup.sh` 成功安装（.env 已存在）
 - [ ] `.venv/bin/open-webui serve` 启动，`curl http://localhost:8080/api/health` 返回正常
+- [ ] `.venv/bin/python -m unittest discover -s tests` 全部通过
 - [ ] 管理员账号可登录，模型列表可见 DeepSeek 模型
 
 ## 测试与优化记录
@@ -167,15 +198,15 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 - Issue #18 工具配置：`configs/course-tools/course-practice-generator.md`
 - Issue #18 验收记录：`docs/tools/verification-results.json`
 - Issue #19 工具配置：`configs/course-tools/random-question-picker.md`
-- Issue #19 题库：`data/question-bank.json`；离线测试：`tests/test_random_picker_tool.py`
+- Issue #19 题库：`data/question-bank.json`；离线测试：`tests/test_random_question_picker_tool.py`
 - Issue #20 工具配置：`configs/course-tools/objective-grader.md`
 - Issue #20 测试：`tests/test_objective_grader_tool.py`
-- Issue #21 工具配置：`configs/course-tools/study-plan-generator.md`；源码：`tools/study_plan_generator.py`；安装脚本：`scripts/create_study_plan_tool.py`；离线测试：`tests/test_study_plan_tool.py`
+- Issue #21 工具配置：`configs/course-tools/study-plan-generator.md`；源码：`tools/study_plan_generator.py`；安装脚本：`scripts/create_study_plan_generator_tool.py`；离线测试：`tests/test_study_plan_generator_tool.py`
 - Issue #22 工具配置：`configs/course-tools/course-catalog-query.md`
-- Issue #22 目录：`data/course-catalog.json`；离线测试：`tests/test_course_catalog_tool.py`
+- Issue #22 目录：`data/course-catalog.json`；离线测试：`tests/test_course_catalog_query_tool.py`
 - Issue #23 工具配置：`configs/course-tools/test-case-generator.md`
 - Issue #23 测试：`tests/test_test_case_generator_tool.py`
-- Issue #24 工具配置：`configs/course-tools/knowledge-prerequisite-query.md`；关系数据：`data/knowledge-prerequisites.json`；离线测试：`tests/test_prerequisite_query_tool.py`
+- Issue #24 工具配置：`configs/course-tools/knowledge-prerequisite-query.md`；关系数据：`data/knowledge-prerequisites.json`；离线测试：`tests/test_knowledge_prerequisite_query_tool.py`
 - Issue #25 固定用例：`configs/system-evaluation/test-cases.json`；自动化脚本：`scripts/verify_system_evaluation.py`；归档目录：`docs/system-evaluation/`
 
 ## 系统测试与评价（Issue #25）
@@ -212,5 +243,5 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 ## 相关链接
 
-- 题目：`2. 李正丹-朱静雯老师的题目.docx`
+- 题目：`docs/李正丹-朱静雯老师的题目.docx`
 - Open WebUI 官方文档：https://docs.openwebui.com/
