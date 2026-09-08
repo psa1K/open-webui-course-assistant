@@ -19,12 +19,12 @@
 - [x] 章节练习题临时生成器（[#18](https://github.com/psa1K/open-webui-course-assistant/issues/18)）：已同步 `course_practice_generator`，并完成本机 Open WebUI 实际对话验收
 - [x] 随机抽题工具（[#19](https://github.com/psa1K/open-webui-course-assistant/issues/19)）：真实题库（23 题，来源 knowledge/ 资料）+ `random_question_picker` 已安装，function calling 验证通过
 - [x] 客观题自动判分工具（[#20](https://github.com/psa1K/open-webui-course-assistant/issues/20)）：`objective_grader` 真实结构化判分（选择/多选/填空/判断），题库对照或通用两种模式，已安装并验证
-- [ ] 学习计划生成工具（[#21](https://github.com/psa1K/open-webui-course-assistant/issues/21)）：`study_plan_generator` 根据结构化课程目录和用户目标/时间/水平约束生成分阶段计划；离线验证已通过，待本机 Open WebUI 实际同步与调用验收
+- [x] 学习计划生成工具（[#21](https://github.com/psa1K/open-webui-course-assistant/issues/21)）：`study_plan_generator` 根据结构化课程目录和用户目标/时间/水平约束生成分阶段计划；离线验证已通过
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
 - [x] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点，已完成本机 Open WebUI 同步与调用验收
 - [x] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）：固定 15 项用例已完成两轮真实测试；获批并实施 OPT-A～OPT-E 后，通过数由 0/15 提升至 10/15。优化前后对比和未通过项均已归档，未将失败伪装为通过
-- [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
+- [x] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）：源码、Git 提交记录、交互记录与项目总结报告（`docs/项目总结报告.md`）已归档
 
 ## 安装与部署
 
