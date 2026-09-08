@@ -23,7 +23,7 @@
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
 - [x] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点，已完成本机 Open WebUI 同步与调用验收
-- [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）
+- [x] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）：固定 15 项用例已完成两轮真实测试；获批并实施 OPT-A～OPT-E 后，通过数由 0/15 提升至 10/15。优化前后对比和未通过项均已归档，未将失败伪装为通过
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
 ## 安装与部署
@@ -211,6 +211,36 @@ Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI�
 - Issue #23 工具配置：`configs/course-tools/test-case-generator.md`
 - Issue #23 测试：`tests/test_test_case_generator_tool.py`
 - Issue #24 工具配置：`configs/course-tools/knowledge-prerequisite-query.md`；关系数据：`data/knowledge-prerequisites.json`；离线测试：`tests/test_prerequisite_query_tool.py`
+- Issue #25 固定用例：`configs/system-evaluation/test-cases.json`；自动化脚本：`scripts/verify_system_evaluation.py`；归档目录：`docs/system-evaluation/`
+
+## 系统测试与评价（Issue #25）
+
+Issue #25 使用固定的 15 个系统测试问题，覆盖 5 个知识问答、3 个综合分析、2 个知识库无答案、练习题生成、客观题批改、2 个自定义工具调用和 1 个异常输入。聊天类问题通过本机 Open WebUI API 调用 `deepseek-v4-flash`、课程助教系统提示词和统一 Knowledge；工具类问题同时核验已部署 Tool ID，并记录已部署工具源码对固定输入的结构化实际输出。
+
+先执行第一轮基线测试：
+
+```bash
+export OPENWEBUI_EMAIL="你的管理员邮箱"
+export OPENWEBUI_PASSWORD="你的管理员密码"
+
+.venv/bin/python scripts/verify_system_evaluation.py \
+  --base http://127.0.0.1:8080 \
+  --model deepseek-v4-flash \
+  --phase baseline
+```
+
+脚本生成 `docs/system-evaluation/baseline-results.json` 和 `docs/system-evaluation/optimization-proposal.md`。优化提案中的每项均为“等待用户批准”；未经项目成员明确批准，不得调整提示词、资料、切分、Top-K、阈值、工具或模型配置。
+
+只在批准的优化完成后，创建并填写 `docs/system-evaluation/approved-optimizations.md`，再以同一套用例运行第二轮：
+
+```bash
+.venv/bin/python scripts/verify_system_evaluation.py \
+  --base http://127.0.0.1:8080 \
+  --model deepseek-v4-flash \
+  --phase optimized
+```
+
+本项目已归档两轮真实结果和 [优化前后对比](docs/system-evaluation/before-after-comparison.md)：通过数由 0/15 提升至 10/15。测试输出会脱敏，禁止记录密码、Bearer Token、API Key、`.env` 内容和本地数据库。第一轮失败项与第二轮仍未通过项均如实保留，不能通过改测试用例掩盖问题；后续若继续优化，必须另行提出方案并获得批准。
 
 
 ## 学习计划生成工具（Issue #21）

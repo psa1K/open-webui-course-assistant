@@ -205,3 +205,36 @@
 - **Agent 关键输出**：将 README 中 Issue #24 更新为已完成，并记录用户已在本机 Open WebUI 成功同步工具、完成知识点查询和先修/后续关系返回的实际调用验收。
 - **采纳的决策**：实际验收由用户确认后才更新完成状态；不在仓库中记录管理员凭据、Token 或完整对话内容。
 - **验证结果**：此前离线测试、dry-run 和差异检查均通过；本次补充本机 Open WebUI 实际同步与调用成功反馈，满足工具“可在 Open WebUI 中调用”的验收条件。
+
+## 交互 20 — Issue #25 系统测试与评价基线框架
+
+- **时间**：2026-09-07 22:16（Asia/Shanghai，实际交互时间）
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：实现 Issue #25 的两轮系统测试与评价流程；第一轮测试后提出逐项优化建议，任何运行配置优化均须由用户逐项批准后才能实施并进行第二轮复测。
+- **Prompt（要点）**：不少于 15 个测试问题，覆盖知识问答、综合分析、知识库无答案、练习题生成/批改、自定义工具调用和错误输入；每题归档实际输出、引用准确性、正确性、问题和改进方式；必须留存优化前后对比。
+- **Agent 关键输出**：新增固定 15 用例配置 `configs/system-evaluation/test-cases.json`、真实 Open WebUI 聊天/RAG API 测试脚本 `scripts/verify_system_evaluation.py`、离线回归测试和 `docs/system-evaluation/` 归档说明。脚本会在基线运行后生成脱敏 `baseline-results.json` 与 `optimization-proposal.md`；工具题同时通过 Open WebUI API 核验已部署的 Tool ID 和源码，并记录固定输入的结构化工具输出。
+- **采纳的决策**：两轮使用同一份固定用例；第一轮只测量和归档，不修改系统提示词、知识库、切分、检索参数、工具或模型；优化提案的每项均标记为“等待用户批准”，只有用户明确批准后才允许创建批准记录、实施对应改动并运行 `--phase optimized`。
+- **验证结果**：`py_compile`、`unittest discover -s tests`（159 项）与 `git diff --check` 通过。当前 Codex 终端未设置 Open WebUI 管理员凭据，且 `http://127.0.0.1:8080` 不可连接，因此尚未执行或伪造第一轮真实 API 结果；Issue #25 保持未完成。
+- **安全检查**：结果写入前会脱敏密码、Token、API Key 与 Authorization 字段；仓库不记录 `.env`、管理员凭据或本地数据库。
+
+## 交互 21 — Issue #25 获批优化 OPT-A～OPT-E 的实施与记录
+
+- **时间**：2026-09-08 11:25（Asia/Shanghai，实际交互时间；在当前工作区运行 `date` 核验）
+- **Agent/模型**：Codex / GPT-5.4
+- **任务**：用户明确批准 Issue #25 的 OPT-A、OPT-B、OPT-C、OPT-D、OPT-E，要求实施所有获批改动并完整留档。
+- **Prompt（要点）**：`批准 OPT-A、OPT-B、OPT-C、OPT-D、OPT-E，将所有改动记录下来`。
+- **Agent 关键输出**：将优化提案改为按根因分组的五项 OPT-A～OPT-E，保留基线 15 个固定问题不变；完善系统测试脚本的课程助教配置核验、透明检索查询扩展、关键来源排序、跨资料双查询、无答案外部事实防护，以及普通/嵌套/流式/tool_calls 工具响应兼容；更新系统提示词和离线回归测试；新增获批优化记录，逐项说明基线证据、实施位置、风险、回滚和下一步。
+- **采纳的决策**：实施范围严格限于 OPT-A～OPT-E；不修改课程资料、知识库切分、模型配置、Top-K=5、阈值=0.30 或固定 15 个测试输入。OPT-D 的 `course_catalog_query` 创建脚本仅完成离线 dry-run 核验；在本机 Open WebUI 真实同步前，不能把它记为部署成功。
+- **验证结果**：本轮离线执行 `py_compile`、`tests/test_system_evaluation.py`（11 项）和 `git diff --check` 均通过。首次尝试连接 `127.0.0.1:8080` 受当前受限执行环境阻止，未进行或伪造第二轮 API 测试；仍需在用户本机启动服务、设置仅本机使用的管理员环境变量、同步 OPT-D 后运行 `--phase optimized`。
+- **问题与解决**：原始 `optimization-proposal.md` 将 15 个失败用例机械编号为 OPT-01～OPT-15，和用户批准的 OPT-A～OPT-E 不一致；已改为按证据链、无答案、工具响应、缺失工具和检索召回五类根因分组。基线结果文件保持原样，未覆盖真实失败记录；未记录密码、Token、API Key 或本地数据库。
+
+## 交互 22 — Issue #25 第二轮真实复测与前后对比归档
+
+- **时间**：2026-09-08 11:44（Asia/Shanghai；以 `optimized-results.json` 的实际生成时间 2026-09-08T03:44:45+00:00 核验）
+- **Agent/模型**：Codex / GPT-5.4；本机验证模型为 `deepseek-v4-flash`
+- **任务**：在用户批准 OPT-A～OPT-E 后，以不变的 15 个固定用例完成第二轮真实 Open WebUI 测试，并按项目要求生成优化前后对比。
+- **Prompt（要点）**：用户运行 `verify_system_evaluation.py --phase optimized` 后确认“至少一次优化前后对比就可以，这个任务算完成了”。
+- **Agent 关键输出**：归档 `optimized-results.json`，新增 `docs/system-evaluation/before-after-comparison.md`，更新 README 和系统测试归档说明；报告按同一套 15 个用例显示通过数从 0/15 提升至 10/15，并逐项列出五个未通过用例。
+- **采纳的决策**：以“完成两轮真实测试、保留实际输出、记录获批优化、提供至少一次前后对比”为 Issue #25 的完成依据；不把“完成归档”表述为“15 项全部通过”。未通过项保持原始状态，不在本轮追加未经批准的提示词、知识库、切分、检索参数、工具或模型变更。
+- **验证结果**：SYS-01、02、04、06、07、09、10、12、13、15 通过；SYS-03、05、08、11、14 未通过。SYS-05 与 SYS-14 记录为 Open WebUI `HTTP 400: Server Connection Error`，未伪造结果；SYS-03、08、11 的资料覆盖、拒答边界或章节定向引用问题已写入后续建议。
+- **安全检查**：两份 JSON、对比报告和交互记录均未写入管理员密码、Token、API Key、`.env` 内容或本地数据库。
