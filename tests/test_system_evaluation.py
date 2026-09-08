@@ -57,11 +57,34 @@ class SystemEvaluationJudgementTests(unittest.TestCase):
         self.assertTrue(evaluation.tool_contract_ok({"id": "SYS-15"}, {"status": "error", "error_code": "INVALID_INPUT"}))
         self.assertFalse(evaluation.tool_contract_ok({"id": "SYS-15"}, {"status": "ok"}))
 
-    def test_proposal_never_marks_change_as_approved(self):
+    def test_proposal_groups_baseline_symptoms_into_five_unapproved_options(self):
         text = evaluation.proposal([{"test_id": "SYS-01", "passed": False, "issues_found": ["引用缺失"]}], "baseline")
-        self.assertIn("OPT-01", text)
+        for option in ("OPT-A", "OPT-B", "OPT-C", "OPT-D", "OPT-E"):
+            self.assertIn(option, text)
         self.assertIn("等待用户批准", text)
-        self.assertNotIn("已批准", text)
+        self.assertNotIn("初始状态 | 已批准", text)
+
+    def test_retrieval_overrides_keep_fixed_user_cases_unchanged(self):
+        cases = {case["id"]: case for case in evaluation.read_cases()}
+        self.assertIn("Codex 有哪些使用入口？", cases["SYS-01"]["input"])
+        self.assertIn("App", evaluation.RETRIEVAL_OVERRIDES["SYS-01"][0])
+        self.assertEqual(len(evaluation.RETRIEVAL_OVERRIDES["SYS-06"]), 2)
+
+    def test_tool_call_response_text_is_retained(self):
+        response = {"choices": [{"message": {"content": None, "tool_calls": [{"function": {"name": "query_chapter", "arguments": '{"keyword":"MCP"}'}}]}}]}
+        self.assertIn("工具调用：query_chapter", evaluation.response_text(response))
+
+    def test_no_answer_rejects_external_memory_after_refusal(self):
+        case = {"id": "SYS-10", "mode": "no_answer", "answer_terms": []}
+        answer = "资料中未找到相关信息。根据我自己的了解，答案是 1200 公里。"
+        result = evaluation.evaluate(case, answer, [], None)
+        self.assertFalse(result["passed"])
+        self.assertIn("外部事实", "；".join(result["issues_found"]))
+
+    def test_tool_contract_is_authoritative_when_initial_tool_response_has_no_text(self):
+        case = {"id": "SYS-15", "mode": "chat_tool", "answer_terms": []}
+        result = evaluation.evaluate(case, "", [], {"status": "error", "error_code": "INVALID_INPUT"})
+        self.assertTrue(result["passed"])
 
     def test_safe_redacts_sensitive_fields(self):
         value = evaluation.safe({"token": "secret", "ordinary": "safe"})

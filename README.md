@@ -23,7 +23,7 @@
 - [x] 课程章节查询工具（[#22](https://github.com/psa1K/open-webui-course-assistant/issues/22)）：结构化课程目录（22 章）+ `course_catalog_query` 关键词/章节查询，已安装并验证
 - [x] 编程题测试用例生成工具（[#23](https://github.com/psa1K/open-webui-course-assistant/issues/23)）：7 个内置模板 + 自定义参考解，受限命名空间运行参考解生成真实可运行用例，已安装并验证
 - [x] 知识点先修关系查询工具（[#24](https://github.com/psa1K/open-webui-course-assistant/issues/24)）：`knowledge_prerequisite_query` 基于结构化关系数据查询知识点的直接/间接前置依赖与后续知识点，已完成本机 Open WebUI 同步与调用验收
-- [ ] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）：已提供固定 15 项真实 API 基线测试与逐项优化审批流程；第一轮结果、获批优化和第二轮对比完成前不标记为完成
+- [x] 系统测试与评价（[#25](https://github.com/psa1K/open-webui-course-assistant/issues/25)）：固定 15 项用例已完成两轮真实测试；获批并实施 OPT-A～OPT-E 后，通过数由 0/15 提升至 10/15。优化前后对比和未通过项均已归档，未将失败伪装为通过
 - [ ] 成果提交（[#26](https://github.com/psa1K/open-webui-course-assistant/issues/26)）
 
 ## 安装与部署
@@ -240,7 +240,7 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
   --phase optimized
 ```
 
-随后根据两份 JSON 生成并归档 `docs/system-evaluation/before-after-comparison.md`。测试输出会脱敏，禁止记录密码、Bearer Token、API Key、`.env` 内容和本地数据库。第一轮失败项必须如实保留，不能通过改测试用例掩盖问题。
+本项目已归档两轮真实结果和 [优化前后对比](docs/system-evaluation/before-after-comparison.md)：通过数由 0/15 提升至 10/15。测试输出会脱敏，禁止记录密码、Bearer Token、API Key、`.env` 内容和本地数据库。第一轮失败项与第二轮仍未通过项均如实保留，不能通过改测试用例掩盖问题；后续若继续优化，必须另行提出方案并获得批准。
 
 
 ## 学习计划生成工具（Issue #21）
