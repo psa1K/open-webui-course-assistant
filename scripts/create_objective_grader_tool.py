@@ -20,7 +20,7 @@ DEFAULT_TOOL_ID = "objective_grader"
 DEFAULT_NAME = "客观题自动判分工具"
 SOURCE = Path(__file__).resolve().parents[1] / "tools/objective_grader.py"
 BANK = Path(__file__).resolve().parents[1] / "data/question-bank.json"
-PLACEHOLDER = re.compile(r"json\.dumps\(\{\"questions\": \[\]\}\).*# PLACEHOLDER_QUESTION_BANK")
+PLACEHOLDER = re.compile(r"^QUESTION_BANK_JSON = .*# PLACEHOLDER_QUESTION_BANK$", re.MULTILINE)
 MIN_QUESTIONS = 8
 
 
