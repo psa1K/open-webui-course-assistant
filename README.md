@@ -88,6 +88,13 @@ curl -X POST http://localhost:8080/openai/config/update \
 3. 在「工作空间」中创建课程专属模型/智能体（系统提示词 + 知识库 + 工具）
 4. 在知识库中上传课程资料，启用 RAG
 
+### 用户与工具使用文档
+
+课程 AI 助教、统一知识库和全部 Workspace Tools 的安装、同步、输入输出、调用示例及使用边界统一维护在以下文档中：
+
+- [课程 AI 助教与知识库使用指南](docs/user-guide/README.md)
+- [Workspace Tools 使用目录](docs/tools/README.md)
+
 ### 上传统一课程知识库
 
 确保本地 Open WebUI 已启动，并在 `.env` 或当前终端设置管理员凭据：
@@ -108,48 +115,6 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 ```
 
 脚本会在同一个 `course-knowledge-base` 上执行 6 类测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护、引用格式检查。结果写入 `docs/rag/verification-results.json`；输出文件只保留脱敏的命中片段摘要和验收字段，不保存密码、token、API Key 或本地数据库。
-
-## 课程 AI 助教（Issue #17）
-
-课程助教配置位于 `configs/course-assistant/`，默认名称为“课程 AI 助教”，使用 `deepseek-v4-flash`，绑定唯一统一知识库 `course-knowledge-base`，覆盖 Codex 实战课程和数学建模课程。配置不包含密码、Token 或 API Key。
-
-先检查配置（不会创建或更新 Open WebUI 模型）：
-
-```bash
-export OPENWEBUI_EMAIL="你的管理员邮箱"
-export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/create_course_assistant.py --base http://127.0.0.1:8080 --model deepseek-v4-flash --dry-run
-```
-
-确认无误后创建或同步工作空间模型；若同 ID 模型已存在，脚本会更新它：
-
-```bash
-.venv/bin/python scripts/create_course_assistant.py --base http://127.0.0.1:8080 --model deepseek-v4-flash
-```
-
-可用 `--knowledge-id` 指定已确认的 Knowledge ID，`--name` 覆盖助教名称，`--model` 覆盖底层模型。脚本会检查模型和 Knowledge 是否存在，并使用 `trust_env=False` 避免本地代理影响请求。Issue #17 已完成：助教已在本机 Open WebUI 创建并绑定统一 Knowledge，系统提示词已覆盖 8 项课程助教能力及学术诚信要求；配置检查记录保存在 `docs/assistant/verification-results.json`。
-
-## 章节练习题临时生成器（Issue #18）
-
-Issue #18 采用临时出题，不使用确定性题库或预置题目。Workspace Tool `章节练习题生成器`（Tool ID：`course_practice_generator`）只负责校验课程、章节、难度、数量、题型、学生水平和答案开关，并返回结构化出题任务；课程 AI 助教再结合统一知识库 `course-knowledge-base` 的实际检索片段生成题目。工具源码和详细约束见 `tools/course_practice_generator.py` 与 `configs/course-tools/course-practice-generator.md`。
-
-先做不写入 Open WebUI 的源码检查：
-
-```bash
-.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080 --dry-run
-```
-
-设置本机管理员凭据后同步工具（已存在时更新，不重复创建）：
-
-```bash
-export OPENWEBUI_EMAIL="你的管理员邮箱"
-export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080
-```
-
-可用 `--tool-id` 和 `--name` 覆盖默认值。工具支持 `course`、`chapter`、`difficulty`、`count`、`question_types`、`student_level`、`include_answer`；输出必须同时包含结构化 JSON 和 Markdown。默认不输出完整答案，显式开启 `include_answer` 时也只提供受控的参考思路、评分要点或简要答案。
-
-Issue #18 已完成：工具已同步到本机 Open WebUI，并完成 Codex CLI、Git/GitHub、数学建模、学生水平、答案开关、无资料拒答、虚构引用防护和结构化输出等实际对话验收。脱敏结果位于 `docs/tools/verification-results.json`，交互过程位于 `interactions/eco-NIN/interactions.md`。
 
 ## 目录结构
 
@@ -242,34 +207,8 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 本项目已归档两轮真实结果和 [优化前后对比](docs/system-evaluation/before-after-comparison.md)：通过数由 0/15 提升至 10/15。测试输出会脱敏，禁止记录密码、Bearer Token、API Key、`.env` 内容和本地数据库。第一轮失败项与第二轮仍未通过项均如实保留，不能通过改测试用例掩盖问题；后续若继续优化，必须另行提出方案并获得批准。
 
+完整归档索引见 [系统测试与评价说明](docs/system-evaluation/README.md)；两轮原始记录可分别查看 [基线测试结果](docs/system-evaluation/baseline-results.json) 和 [优化后测试结果](docs/system-evaluation/optimized-results.json)。
 
-## 学习计划生成工具（Issue #21）
-
-`学习计划生成工具`（Tool ID：`study_plan_generator`）接受学习目标、计划时长、课程、学生水平、每周学习时长和偏好章节，基于 `data/course-catalog.json` 的结构化章节数据返回分阶段计划生成任务。工具不保存固定计划，也不调用网络或数据库；Open WebUI 中的课程 AI 助教依据真实目录生成 JSON + Markdown 计划，并标注章节来源。
-
-```bash
-export OPENWEBUI_EMAIL="你的管理员邮箱"
-export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080
-```
-
-同步成功后，在 Open WebUI 的“工作空间 → 工具”中选择“学习计划生成工具”。配置说明和调用示例见 `configs/course-tools/study-plan-generator.md`。
-
-Issue #16 已于 2026-09-04 通过 6 类真实最终回答测试：直接问答、章节定位、跨资料综合、知识库无答案、错误引用防护和引用格式检查。验证使用 `deepseek-v4-flash`，结果保存在 `docs/rag/verification-results.json`。后续资料或模型配置变化后，应重新运行验收；不能仅凭上传成功或检索接口返回片段宣称通过。
-
-## 知识点先修关系查询工具（Issue #24）
-
-`知识点先修关系查询工具`（Tool ID：`knowledge_prerequisite_query`）使用 `data/knowledge-prerequisites.json` 的结构化推荐学习依赖关系，查询某个知识点的直接前置依赖和后续知识点；传入 `include_indirect=true` 可同时查看间接关系。每个结果均映射到 `data/course-catalog.json` 中的真实课程章节和知识资料文件；未知知识点会返回“资料中未找到相关信息”。
-
-```bash
-export OPENWEBUI_EMAIL="你的管理员邮箱"
-export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080
-```
-
-同步后在 Open WebUI 的“工作空间 → 工具”中选择“知识点先修关系查询工具”。详细输入、输出和调用示例见 `configs/course-tools/knowledge-prerequisite-query.md`。Issue #24 已完成：用户确认工具已成功同步到本机 Open WebUI，并完成知识点查询、直接/间接关系和资料来源返回的实际调用验收。
 
 ## 相关链接
 
