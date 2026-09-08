@@ -69,11 +69,13 @@ def wait_for_processing(client: httpx.Client, base: str, headers: dict[str, str]
     raise TimeoutError(f"File processing timed out for {file_id}")
 
 
-def source_files(root: Path) -> list[Path]:
+def source_files(root: Path, expected_count: int | None) -> list[Path]:
     files = sorted(path for path in (root / "knowledge").rglob("*") if path.is_file() and path.name != "README.md")
-    if len(files) != EXPECTED_SOURCE_FILE_COUNT:
+    if expected_count is not None and len(files) != expected_count:
         raise RuntimeError(
-            f"Expected {EXPECTED_SOURCE_FILE_COUNT} knowledge files under {root / 'knowledge'}, found {len(files)}"
+            f"Expected {expected_count} knowledge files under {root / 'knowledge'}, found {len(files)}. "
+            "If knowledge/ changed intentionally, pass --expected-count with the new total "
+            "and re-run scripts/verify_rag.py afterwards."
         )
     return files
 
@@ -103,10 +105,16 @@ def main() -> None:
     parser.add_argument("--root", default=".")
     parser.add_argument("--reset", action="store_true", help="Delete and recreate the unified knowledge base")
     parser.add_argument("--timeout", type=float, default=300.0, help="Per-file processing timeout in seconds")
+    parser.add_argument(
+        "--expected-count",
+        type=int,
+        default=EXPECTED_SOURCE_FILE_COUNT,
+        help="Expected number of files under knowledge/ (excluding README.md); guards against partial uploads",
+    )
     args = parser.parse_args()
     base = args.base.rstrip("/")
     root = Path(args.root).resolve()
-    files = source_files(root)
+    files = source_files(root, args.expected_count)
 
     with httpx.Client(timeout=60.0, trust_env=False) as client:
         token = login(client, base)
