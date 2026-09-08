@@ -236,7 +236,7 @@ class Tools:
         count = self._normalize_count(count)
         if count is None:
             return {"status": "error", "error_code": "INVALID_INPUT", "message": f"count 必须是 1 到 {MAX_COUNT} 之间的整数。"}
-        overrides = self._parse_json(seed, constraints)
+        overrides = self._parse_json(constraints)
         if overrides is None:
             return {"status": "error", "error_code": "INVALID_INPUT", "message": "constraints 必须是非空 JSON 对象。"}
 
@@ -275,7 +275,7 @@ class Tools:
         count = self._normalize_count(count)
         if count is None:
             return {"status": "error", "error_code": "INVALID_INPUT", "message": f"count 必须是 1 到 {MAX_COUNT} 之间的整数。"}
-        spec = self._parse_json(seed, input_spec)
+        spec = self._parse_json(input_spec)
         if spec is None:
             return {"status": "error", "error_code": "INVALID_INPUT", "message": "input_spec 必须是非空 JSON 对象。"}
 
@@ -322,7 +322,7 @@ class Tools:
         return count if 1 <= count <= MAX_COUNT else None
 
     @staticmethod
-    def _parse_json(_seed: Any, value: str) -> dict[str, Any] | None:
+    def _parse_json(value: str) -> dict[str, Any] | None:
         if not isinstance(value, str) or not value.strip():
             return None
         try:

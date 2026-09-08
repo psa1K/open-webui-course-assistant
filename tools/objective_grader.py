@@ -72,6 +72,10 @@ def _to_answer_letter(raw: Any) -> str:
     return str(raw).strip().upper()
 
 
+def _choice_letter(index: int) -> str:
+    return CHOICE_LETTERS[index] if 0 <= index < len(CHOICE_LETTERS) else str(index + 1)
+
+
 class Tools:
     """Auto-grade objective questions with real structured logic."""
 
@@ -215,14 +219,13 @@ class Tools:
         return self._entry_multi(item, points, ok, student, options, {student_index} if student_index is not None else set(), include_explanation)
 
     def _entry_multi(self, item: dict[str, Any], points: float, ok: bool, student: Any, options: list[str], student_indexes: set[int], include_explanation: bool) -> dict[str, Any]:
-        letter = lambda i: CHOICE_LETTERS[i] if 0 <= i < len(CHOICE_LETTERS) else str(i + 1)
         entry = {
             "number": int(item.get("number", 1)),
             "id": item.get("id", ""),
             "type": item.get("type", "choice"),
             "question": item.get("question", ""),
             "student_answer": str(student),
-            "student_answer_normalized": "".join(sorted(letter(i) for i in student_indexes)) if student_indexes else "未识别",
+            "student_answer_normalized": "".join(sorted(_choice_letter(i) for i in student_indexes)) if student_indexes else "未识别",
             "correct": ok,
             "points": points,
             "earned_points": points if ok else 0.0,
@@ -232,15 +235,14 @@ class Tools:
         return entry
 
     def _result_entry(self, question: dict[str, Any], earned: float, total: float, student: Any, correct_index: int, options: list[str], student_index: int | None, include_explanation: bool) -> dict[str, Any]:
-        letter = lambda i: CHOICE_LETTERS[i] if 0 <= i < len(CHOICE_LETTERS) else str(i + 1)
         correct = earned >= total
         entry = {
             "id": question["id"],
             "type": question.get("type", "概念题"),
             "question": question["question"],
             "student_answer": str(student),
-            "student_answer_normalized": letter(student_index) if student_index is not None else "未识别",
-            "standard_answer": f"{letter(correct_index)} {options[correct_index]}",
+            "student_answer_normalized": _choice_letter(student_index) if student_index is not None else "未识别",
+            "standard_answer": f"{_choice_letter(correct_index)} {options[correct_index]}",
             "correct": correct,
             "points": total,
             "earned_points": earned,
