@@ -93,15 +93,17 @@ def main() -> None:
     args = parser.parse_args()
     base = args.base.rstrip("/")
     config = {"assistant_id": DEFAULT_ID, "name": args.name, "model": args.model, "knowledge_name": KNOWLEDGE_NAME}
+    if args.dry_run:
+        knowledge = {"id": args.knowledge_id or "(live run auto-discovers by name)", "name": KNOWLEDGE_NAME}
+        body = payload(args.model, args.name, knowledge)
+        print(json.dumps({**config, "knowledge_id": knowledge["id"], "prompt_chars": len(body["params"]["system"]), "mode": "dry-run"}, ensure_ascii=False, indent=2))
+        return
     with httpx.Client(timeout=60, trust_env=False) as client:
         token = login(client, base)
         headers = {"Authorization": f"Bearer {token}"}
         knowledge = discover_knowledge(client, base, headers, args.knowledge_id)
         discover_model(client, base, headers, args.model)
         body = payload(args.model, args.name, knowledge)
-        if args.dry_run:
-            print(json.dumps({**config, "knowledge_id": knowledge["id"], "mode": "dry-run"}, ensure_ascii=False, indent=2))
-            return
         existing = client.get(f"{base}/api/v1/models/model", params={"id": DEFAULT_ID}, headers=headers)
         if existing.status_code == 404:
             response = client.post(f"{base}/api/v1/models/create", headers=headers, json=body)

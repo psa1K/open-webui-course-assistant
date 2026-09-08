@@ -7,7 +7,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TOOL_PATH = ROOT / "tools/study_plan_generator.py"
-SCRIPT_PATH = ROOT / "scripts/create_study_plan_tool.py"
+SCRIPT_PATH = ROOT / "scripts/create_study_plan_generator_tool.py"
 CATALOG_PATH = ROOT / "data/course-catalog.json"
 
 
@@ -21,7 +21,7 @@ def load(path: pathlib.Path, name: str):
 catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
 tool_module = load(TOOL_PATH, "study_plan_generator")
 tool_module.COURSE_CATALOG_JSON = json.dumps(catalog, ensure_ascii=False)
-creator = load(SCRIPT_PATH, "create_study_plan_tool")
+creator = load(SCRIPT_PATH, "create_study_plan_generator_tool")
 
 
 class StudyPlanToolTests(unittest.TestCase):

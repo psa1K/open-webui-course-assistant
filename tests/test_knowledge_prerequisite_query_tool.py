@@ -7,7 +7,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 TOOL_PATH = ROOT / "tools/knowledge_prerequisite_query.py"
-SCRIPT_PATH = ROOT / "scripts/create_prerequisite_query_tool.py"
+SCRIPT_PATH = ROOT / "scripts/create_knowledge_prerequisite_query_tool.py"
 CATALOG_PATH = ROOT / "data/course-catalog.json"
 GRAPH_PATH = ROOT / "data/knowledge-prerequisites.json"
 
@@ -24,7 +24,7 @@ graph = json.loads(GRAPH_PATH.read_text(encoding="utf-8"))
 tool_module = load(TOOL_PATH, "knowledge_prerequisite_query")
 tool_module.COURSE_CATALOG_JSON = json.dumps(catalog, ensure_ascii=False)
 tool_module.PREREQUISITE_GRAPH_JSON = json.dumps(graph, ensure_ascii=False)
-creator = load(SCRIPT_PATH, "create_prerequisite_query_tool")
+creator = load(SCRIPT_PATH, "create_knowledge_prerequisite_query_tool")
 
 
 class PrerequisiteQueryTests(unittest.TestCase):

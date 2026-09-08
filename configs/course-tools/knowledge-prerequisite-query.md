@@ -64,12 +64,12 @@ export OPENWEBUI_EMAIL="你的管理员邮箱"
 export OPENWEBUI_PASSWORD="你的管理员密码"
 
 # 仅检查工具源码和嵌入数据，不写入 Open WebUI
-.venv/bin/python scripts/create_prerequisite_query_tool.py \
+.venv/bin/python scripts/create_knowledge_prerequisite_query_tool.py \
   --base http://127.0.0.1:8080 \
   --dry-run
 
 # 创建；同 ID 已存在时更新
-.venv/bin/python scripts/create_prerequisite_query_tool.py \
+.venv/bin/python scripts/create_knowledge_prerequisite_query_tool.py \
   --base http://127.0.0.1:8080
 ```
 

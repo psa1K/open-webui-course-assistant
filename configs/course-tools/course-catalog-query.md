@@ -56,8 +56,8 @@
 
 ```bash
 # 安装/更新（目录内嵌 + 校验）
-.venv/bin/python scripts/create_course_catalog_tool.py --dry-run
-.venv/bin/python scripts/create_course_catalog_tool.py
+.venv/bin/python scripts/create_course_catalog_query_tool.py --dry-run
+.venv/bin/python scripts/create_course_catalog_query_tool.py
 ```
 
 对话中直接说：

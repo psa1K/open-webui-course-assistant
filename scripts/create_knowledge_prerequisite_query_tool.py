@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tools/knowledge_prerequisite_query.py"
 CATALOG = ROOT / "data/course-catalog.json"
 GRAPH = ROOT / "data/knowledge-prerequisites.json"
-CATALOG_PLACEHOLDER = re.compile(r"json\.dumps\(\{\"courses\": \[\]\}\).*# PLACEHOLDER_COURSE_CATALOG")
-GRAPH_PLACEHOLDER = re.compile(r"json\.dumps\(\{\"knowledge_points\": \[\], \"relations\": \[\]\}\).*# PLACEHOLDER_PREREQUISITE_GRAPH")
+CATALOG_PLACEHOLDER = re.compile(r"^COURSE_CATALOG_JSON = .*# PLACEHOLDER_COURSE_CATALOG$", re.MULTILINE)
+GRAPH_PLACEHOLDER = re.compile(r"^PREREQUISITE_GRAPH_JSON = .*# PLACEHOLDER_PREREQUISITE_GRAPH$", re.MULTILINE)
 
 
 def required_env(name: str) -> str:

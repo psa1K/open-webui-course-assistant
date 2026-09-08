@@ -45,4 +45,4 @@
 请根据 Git/GitHub 工作流章节，生成 3 道进阶综合题，要求包含项目协作场景。
 ```
 
-工具同步命令见根目录 `README.md` 和 `scripts/create_course_tool.py`；可先使用 `--dry-run` 检查源码，不会写入 Open WebUI。
+工具同步命令见根目录 `README.md` 和 `scripts/create_course_practice_generator_tool.py`；可先使用 `--dry-run` 检查源码，不会写入 Open WebUI。

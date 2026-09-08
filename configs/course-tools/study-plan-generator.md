@@ -32,8 +32,8 @@
 ```bash
 export OPENWEBUI_EMAIL="你的管理员邮箱"
 export OPENWEBUI_PASSWORD="你的管理员密码"
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_study_plan_generator_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_study_plan_generator_tool.py --base http://127.0.0.1:8080
 ```
 
 在 Open WebUI 的“工作空间 → 工具”中选择 `学习计划生成工具`，示例请求：
