@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL_PATH = ROOT / "tools/course_practice_generator.py"
-SCRIPT_PATH = ROOT / "scripts/create_course_tool.py"
+SCRIPT_PATH = ROOT / "scripts/create_course_practice_generator_tool.py"
 
 def load(path, name):
     spec = importlib.util.spec_from_file_location(name, path)
@@ -15,7 +15,7 @@ def load(path, name):
 
 
 tool = load(TOOL_PATH, "course_practice_generator")
-creator = load(SCRIPT_PATH, "create_course_tool")
+creator = load(SCRIPT_PATH, "create_course_practice_generator_tool")
 
 
 class CourseToolTests(unittest.TestCase):

@@ -57,8 +57,8 @@
 
 ```bash
 # 安装/更新（题库内嵌 + 校验）
-.venv/bin/python scripts/create_random_picker_tool.py --dry-run
-.venv/bin/python scripts/create_random_picker_tool.py
+.venv/bin/python scripts/create_random_question_picker_tool.py --dry-run
+.venv/bin/python scripts/create_random_question_picker_tool.py
 ```
 
 对话中直接说：

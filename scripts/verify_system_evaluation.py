@@ -418,7 +418,7 @@ def proposal(results: list[dict[str, Any]], phase: str = "baseline") -> str:
         (
             "OPT-D",
             evidence(["SYS-13"], "课程章节查询工具在基线中返回 HTTP 404"),
-            "使用既有 `create_course_catalog_tool.py` 创建或更新 `course_catalog_query`，并在第二轮核验部署记录与固定查询结果。",
+            "使用既有 `create_course_catalog_query_tool.py` 创建或更新 `course_catalog_query`，并在第二轮核验部署记录与固定查询结果。",
             "需要本机 Open WebUI 运行和管理员环境变量；未同步时应如实记录失败。",
             "在 Open WebUI 删除/更新该工具，或恢复部署前状态。",
         ),

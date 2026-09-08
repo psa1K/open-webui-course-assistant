@@ -29,32 +29,32 @@ export OPENWEBUI_PASSWORD="你的管理员密码"
 
 ```bash
 # 章节练习题临时生成器
-.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_course_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_course_practice_generator_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_course_practice_generator_tool.py --base http://127.0.0.1:8080
 
 # 随机抽题工具
-.venv/bin/python scripts/create_random_picker_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_random_picker_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_random_question_picker_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_random_question_picker_tool.py --base http://127.0.0.1:8080
 
 # 客观题自动判分工具
 .venv/bin/python scripts/create_objective_grader_tool.py --base http://127.0.0.1:8080 --dry-run
 .venv/bin/python scripts/create_objective_grader_tool.py --base http://127.0.0.1:8080
 
 # 学习计划生成工具
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_study_plan_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_study_plan_generator_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_study_plan_generator_tool.py --base http://127.0.0.1:8080
 
 # 课程章节查询工具
-.venv/bin/python scripts/create_course_catalog_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_course_catalog_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_course_catalog_query_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_course_catalog_query_tool.py --base http://127.0.0.1:8080
 
 # 编程题测试用例生成工具
 .venv/bin/python scripts/create_test_case_generator_tool.py --base http://127.0.0.1:8080 --dry-run
 .venv/bin/python scripts/create_test_case_generator_tool.py --base http://127.0.0.1:8080
 
 # 知识点先修关系查询工具
-.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080 --dry-run
-.venv/bin/python scripts/create_prerequisite_query_tool.py --base http://127.0.0.1:8080
+.venv/bin/python scripts/create_knowledge_prerequisite_query_tool.py --base http://127.0.0.1:8080 --dry-run
+.venv/bin/python scripts/create_knowledge_prerequisite_query_tool.py --base http://127.0.0.1:8080
 ```
 
 已存在同一 Tool ID 时，脚本会更新现有工具而不是重复创建。脚本报错时先确认 Open WebUI 正在运行、管理员账号正确，并检查模型或知识库是否已按 [用户指南](../user-guide/README.md) 配置。

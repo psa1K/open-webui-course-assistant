@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL_PATH = ROOT / "tools/random_question_picker.py"
-SCRIPT_PATH = ROOT / "scripts/create_random_picker_tool.py"
+SCRIPT_PATH = ROOT / "scripts/create_random_question_picker_tool.py"
 BANK_PATH = ROOT / "data/question-bank.json"
 COURSE_DIR = {"codex": "knowledge/codex-course", "math-modeling": "knowledge/math-modeling"}
 
@@ -20,7 +20,7 @@ def load(path, name):
 
 def load_embedded_tool():
     """Load the tool with the question bank inlined, as the installer does."""
-    creator = load(SCRIPT_PATH, f"create_random_picker_tool_{id(object())}")
+    creator = load(SCRIPT_PATH, f"create_random_question_picker_tool_{id(object())}")
     content = creator.build_content()
     with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as fh:
         fh.write(content)
@@ -32,7 +32,7 @@ def load_embedded_tool():
 
 
 tool = load_embedded_tool()
-creator = load(SCRIPT_PATH, "create_random_picker_tool")
+creator = load(SCRIPT_PATH, "create_random_question_picker_tool")
 bank_data = json.loads(BANK_PATH.read_text())
 
 

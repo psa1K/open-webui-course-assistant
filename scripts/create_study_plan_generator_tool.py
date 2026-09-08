@@ -16,7 +16,7 @@ DEFAULT_TOOL_ID = "study_plan_generator"
 DEFAULT_NAME = "学习计划生成工具"
 SOURCE = Path(__file__).resolve().parents[1] / "tools/study_plan_generator.py"
 CATALOG = Path(__file__).resolve().parents[1] / "data/course-catalog.json"
-PLACEHOLDER = re.compile(r"json\.dumps\(\{\"courses\": \[\]\}\).*# PLACEHOLDER_COURSE_CATALOG")
+PLACEHOLDER = re.compile(r"^COURSE_CATALOG_JSON = .*# PLACEHOLDER_COURSE_CATALOG$", re.MULTILINE)
 
 
 def required_env(name: str) -> str:

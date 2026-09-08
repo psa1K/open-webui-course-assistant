@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOL_PATH = ROOT / "tools/course_catalog_query.py"
-SCRIPT_PATH = ROOT / "scripts/create_course_catalog_tool.py"
+SCRIPT_PATH = ROOT / "scripts/create_course_catalog_query_tool.py"
 CATALOG_PATH = ROOT / "data/course-catalog.json"
 
 
@@ -18,7 +18,7 @@ def load(path, name):
 
 
 def load_embedded_tool():
-    creator = load(SCRIPT_PATH, f"create_course_catalog_tool_{id(object())}")
+    creator = load(SCRIPT_PATH, f"create_course_catalog_query_tool_{id(object())}")
     content = creator.build_content()
     with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False) as fh:
         fh.write(content)
@@ -30,7 +30,7 @@ def load_embedded_tool():
 
 
 tool = load_embedded_tool()
-creator = load(SCRIPT_PATH, "create_course_catalog_tool")
+creator = load(SCRIPT_PATH, "create_course_catalog_query_tool")
 catalog_data = json.loads(CATALOG_PATH.read_text())
 
 
